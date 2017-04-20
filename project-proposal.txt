@@ -1,0 +1,11 @@
+Project title: Calendar Event File Generator
+
+Project members: Richard Su (yrsu) and Thomas Han (jhan9)
+
+Summary: For our final project, we will create a simple grammar for representing calendar information and make a tool that, given an input with correct grammar, will output a .ics file that can be added to any supported calendar.
+
+Technology: Agda, IAL, emacs
+
+Milestone: By April 21, we hope to have the basic grammar established. The parser should also be completed by this point.
+
+Backup plan: Rather than having a backup plan, we intend to start small with the basic pieces of event information (name, startTime, endTime) and add more if possible (i.e. recurring events, alerts, etc.)

@@ -1,0 +1,41 @@
+aggycal
+
+Start
+
+strt
+
+Syntactic
+
+Strt : strt ->  ows evtname '\n' date ws timerange ows .
+
+EventName : evtname -> id .
+
+AmericanDate : date -> month datesep day datesep year .
+GlobalDate : date -> year datesep month datesep day .
+
+RegTime : timerange -> hour ':' minute ows whichm timesep ows hour ':' minute ows whichm .
+MilitaryTime : timerange -> hour ':' minute ows timesep ows hour ':' minute .
+AllDay : timerange -> allday .
+
+Lexical
+
+aws => ('\n' | '\t' | space ).
+ws => aws+.
+ows => aws* .
+
+id -> (['a' - 'z' 'A' - 'Z' '0' - '9'] | space | '!' | '?')+ .
+
+digit => ['0' - '9'] .
+twodigit => digit digit .
+month -> twodigit .
+day -> twodigit .
+year -> digit digit digit digit .
+datesep -> ('/' | '.' | ',' | space) .
+
+hour -> twodigit .
+minute -> twodigit .
+whichm -> ('AM' | 'am' | 'PM' | 'pm') .
+timesep => ('to' | '-' ) .
+alldayA => ('all' | 'All' | 'ALL') .
+alldayD => ('day' | 'Day' | 'DAY') .
+allday => alldayA ows alldayD .

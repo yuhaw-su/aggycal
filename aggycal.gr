@@ -8,14 +8,19 @@ Syntactic
 
 Strt : strt ->  ows evtname '\n' date ws timerange ows .
 
-EventName : evtname -> id .
+EventName : evtname -> words .
 
 AmericanDate : date -> month datesep day datesep year .
 GlobalDate : date -> year datesep month datesep day .
 
-RegTime : timerange -> hour ':' minute ows whichm timesep ows hour ':' minute ows whichm .
-MilitaryTime : timerange -> hour ':' minute ows timesep ows hour ':' minute .
-AllDay : timerange -> allday .
+PM : whichm -> pm .
+AM : whichm -> am .
+
+RegTime : time -> hour ':' minute ows whichm .
+MilitaryTime : time -> hour ':' minute .
+
+TimeRange : timerange -> time ows timesep ows time .
+AllDayRange : timerange -> allday .
 
 Lexical
 
@@ -23,18 +28,19 @@ aws => ('\n' | '\t' | space ).
 ws => aws+.
 ows => aws* .
 
-id -> (['a' - 'z' 'A' - 'Z' '0' - '9'] | space | '!' | '?')+ .
+words -> (['a' - 'z' 'A' - 'Z' '0' - '9'] | space | '!' | '?')+ .
 
-digit => ['0' - '9'] .
-twodigit => digit digit .
+digit -> ['0' - '9'] .
+twodigit -> digit digit .
 month -> twodigit .
 day -> twodigit .
 year -> digit digit digit digit .
-datesep -> ('/' | '.' | ',' | space) .
+datesep => ('/' | '.' | ',' | space) .
 
 hour -> twodigit .
 minute -> twodigit .
-whichm -> ('AM' | 'am' | 'PM' | 'pm') .
+am => ('AM' | 'am') .
+pm => ('PM' | 'pm') .
 timesep => ('to' | '-' ) .
 alldayA => ('all' | 'All' | 'ALL') .
 alldayD => ('day' | 'Day' | 'DAY') .

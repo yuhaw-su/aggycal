@@ -30,10 +30,10 @@ name12 = "aggycal-main.parsem.pderiv.insert-front-id"
 d12 v0 v1 v2 v3 = coe MAlonzo.Code.Qparse.du164 v2 v3
 name14 = "aggycal-main.parsem.pderiv.parse"
 d14
-  = coe MAlonzo.Code.Qparse.du190 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du190 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name16 = "aggycal-main.parsem.pderiv.parse-filter"
 d16
-  = coe MAlonzo.Code.Qparse.du204 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du204 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name18 = "aggycal-main.parsem.pderiv.re-to-run"
 d18 v0 v1 v2 v3 = coe MAlonzo.Code.Qparse.du140 v2 v3
 name20 = "aggycal-main.parsem.pderiv.rewrite-main"
@@ -42,7 +42,7 @@ name22 = "aggycal-main.parsem.pderiv.rewriteRun"
 d22 v0 v1 v2 v3 = coe MAlonzo.Code.Qparse.du604 v0 v3
 name26 = "aggycal-main.parsem.pderiv.runRtn"
 d26
-  = coe MAlonzo.Code.Qparse.du484 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du484 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name36 = "aggycal-main.parsem.pnoderiv.RE"
 d36 a0 a1 = ()
 name40 = "aggycal-main.parsem.pnoderiv.insert-back-id"
@@ -51,10 +51,10 @@ name42 = "aggycal-main.parsem.pnoderiv.insert-front-id"
 d42 v0 v1 v2 v3 = coe MAlonzo.Code.Qparse.du662 v2 v3
 name44 = "aggycal-main.parsem.pnoderiv.parse"
 d44
-  = coe MAlonzo.Code.Qparse.du688 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du688 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name46 = "aggycal-main.parsem.pnoderiv.parse-filter"
 d46
-  = coe MAlonzo.Code.Qparse.du702 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du702 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name48 = "aggycal-main.parsem.pnoderiv.re-to-run"
 d48 v0 v1 v2 v3 = coe MAlonzo.Code.Qparse.du644 v2 v3
 name50 = "aggycal-main.parsem.pnoderiv.rewrite-main"
@@ -63,19 +63,19 @@ name52 = "aggycal-main.parsem.pnoderiv.rewriteRun"
 d52 v0 v1 v2 = coe MAlonzo.Code.Qparse.du1096 v0 v2
 name56 = "aggycal-main.parsem.pnoderiv.runRtn"
 d56
-  = coe MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name82 = "aggycal-main._.rewriteRun"
-d82 = coe MAlonzo.Code.Qparse.du1096 MAlonzo.Code.Qaggycal.d552
+d82 = coe MAlonzo.Code.Qparse.du1096 MAlonzo.Code.Qaggycal.d556
 name86 = "aggycal-main._.runRtn"
 d86
   = coe
-      MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d376
-      erased MAlonzo.Code.Qaggycal.d112
+      MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d356
+      erased MAlonzo.Code.Qaggycal.d116
 name154 = "aggycal-main._.noderiv.Run"
 d154 = erased
 name156 = "aggycal-main._.noderiv.Run-to-string"
 d156
-  = coe MAlonzo.Code.Qrun.d134 MAlonzo.Code.QaggycalZ45Ztypes.d376
+  = coe MAlonzo.Code.Qrun.d134 MAlonzo.Code.QaggycalZ45Ztypes.d356
 name182 = "aggycal-main.process-strt"
 d182 v0 = du182
 du182 = coe Data.Text.pack ""
@@ -107,7 +107,7 @@ d192 v0 v1
              (coe
                 MAlonzo.Code.Qio.d14
                 (coe
-                   MAlonzo.Code.Qrun.d134 MAlonzo.Code.QaggycalZ45Ztypes.d376 v1))
+                   MAlonzo.Code.Qrun.d134 MAlonzo.Code.QaggycalZ45Ztypes.d356 v1))
              (coe MAlonzo.Code.Qio.d14 (coe Data.Text.pack "\n"))
       False -> coe MAlonzo.Code.Qio.d6 erased erased
       _ -> coe MAlonzo.RTE.mazUnreachableError
@@ -143,8 +143,8 @@ d214 v0 v1 v2 v3 = du214 v0 v1 v3
 du214 v0 v1 v2
   = let v3
           = coe
-              MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d376
-              erased MAlonzo.Code.Qaggycal.d112
+              MAlonzo.Code.Qparse.du982 MAlonzo.Code.QaggycalZ45Ztypes.d356
+              erased MAlonzo.Code.Qaggycal.d116
               (coe MAlonzo.Code.Qstring.d14 v2) in
     case coe v3 of
       MAlonzo.Code.Qsum.C22 v4
@@ -162,7 +162,7 @@ du214 v0 v1 v2
       MAlonzo.Code.Qsum.C26 v4
         -> let v5 = coe d192 v0 v4 in
            let v6
-                 = coe MAlonzo.Code.Qparse.du1096 MAlonzo.Code.Qaggycal.d552 v4 in
+                 = coe MAlonzo.Code.Qparse.du1096 MAlonzo.Code.Qaggycal.d556 v4 in
            let v7 = coe d192 v1 v6 in
            coe
              MAlonzo.Code.Qio.du86 (coe MAlonzo.Code.Qio.du86 v5 v7)

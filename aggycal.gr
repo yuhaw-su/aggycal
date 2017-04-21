@@ -6,7 +6,7 @@ strt
 
 Syntactic
 
-Strt : strt ->  ows evtname '\n' date ws timerange ows .
+Strt : strt ->  ows evtname '\n' date ws timerange ows description ows .
 
 EventName : evtname -> words .
 
@@ -22,13 +22,17 @@ MilitaryTime : time -> hour ':' minute .
 TimeRange : timerange -> time ows timesep ows time .
 AllDayRange : timerange -> allday .
 
+NoDescription : description -> .
+Description : description -> words .
+
 Lexical
 
 aws => ('\n' | '\t' | space ).
 ws => aws+.
 ows => aws* .
 
-words -> (['a' - 'z' 'A' - 'Z' '0' - '9'] | space | '!' | '?')+ .
+symbol -> (space | '!' | '?' | '.' | ',' | '$' | '+' | '-' | '(' | ')' | '#' | '@' | ';' | '_' | '%' | '"' | quote) .
+words -> (['a' - 'z' 'A' - 'Z' '0' - '9'] | symbol )+ .
 
 digit -> ['0' - '9'] .
 twodigit -> digit digit .

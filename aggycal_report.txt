@@ -12,7 +12,7 @@ strt
 Syntactic
 
 Posinfo : posinfo -> .
-Strt : strt -> ows evtname '\n' date ws timerange ows .
+Strt : strt -> ows evtname '\n' date ws timerange ows description ows .
 EventName : evtname -> words .
 AmericanDate : date -> month datesep day datesep year .
 GlobalDate : date -> year datesep month datesep day .
@@ -22,6 +22,8 @@ RegTime : time -> hour ':' minute ows whichm .
 MilitaryTime : time -> hour ':' minute .
 TimeRange : timerange -> time ows timesep ows time .
 AllDayRange : timerange -> allday .
+NoDescription : description -> .
+Description : description -> words .
 
 
 Lexical
@@ -37,120 +39,149 @@ ws => ws-plus-3 .
 ows-star-4 => .
 ows-star-4 => aws ows-star-4 .
 ows => ows-star-4 .
-words-range-5 -> '0' .
-words-range-5 -> '1' .
-words-range-5 -> '2' .
-words-range-5 -> '3' .
-words-range-5 -> '4' .
-words-range-5 -> '5' .
-words-range-5 -> '6' .
-words-range-5 -> '7' .
-words-range-5 -> '8' .
-words-range-5 -> '9' .
-words-range-5 -> 'A' .
-words-range-5 -> 'B' .
-words-range-5 -> 'C' .
-words-range-5 -> 'D' .
-words-range-5 -> 'E' .
-words-range-5 -> 'F' .
-words-range-5 -> 'G' .
-words-range-5 -> 'H' .
-words-range-5 -> 'I' .
-words-range-5 -> 'J' .
-words-range-5 -> 'K' .
-words-range-5 -> 'L' .
-words-range-5 -> 'M' .
-words-range-5 -> 'N' .
-words-range-5 -> 'O' .
-words-range-5 -> 'P' .
-words-range-5 -> 'Q' .
-words-range-5 -> 'R' .
-words-range-5 -> 'S' .
-words-range-5 -> 'T' .
-words-range-5 -> 'U' .
-words-range-5 -> 'V' .
-words-range-5 -> 'W' .
-words-range-5 -> 'X' .
-words-range-5 -> 'Y' .
-words-range-5 -> 'Z' .
-words-range-5 -> 'a' .
-words-range-5 -> 'b' .
-words-range-5 -> 'c' .
-words-range-5 -> 'd' .
-words-range-5 -> 'e' .
-words-range-5 -> 'f' .
-words-range-5 -> 'g' .
-words-range-5 -> 'h' .
-words-range-5 -> 'i' .
-words-range-5 -> 'j' .
-words-range-5 -> 'k' .
-words-range-5 -> 'l' .
-words-range-5 -> 'm' .
-words-range-5 -> 'n' .
-words-range-5 -> 'o' .
-words-range-5 -> 'p' .
-words-range-5 -> 'q' .
-words-range-5 -> 'r' .
-words-range-5 -> 's' .
-words-range-5 -> 't' .
-words-range-5 -> 'u' .
-words-range-5 -> 'v' .
-words-range-5 -> 'w' .
-words-range-5 -> 'x' .
-words-range-5 -> 'y' .
-words-range-5 -> 'z' .
-words-bar-6 -> '!' .
-words-bar-6 -> '?' .
-words-bar-7 -> ' ' .
-words-bar-7 -> words-bar-6 .
-words-bar-8 -> words-range-5 .
-words-bar-8 -> words-bar-7 .
-words-plus-9 -> words-bar-8 .
-words-plus-9 -> words-bar-8 words-plus-9 .
-words -> words-plus-9 .
-digit-range-10 -> '0' .
-digit-range-10 -> '1' .
-digit-range-10 -> '2' .
-digit-range-10 -> '3' .
-digit-range-10 -> '4' .
-digit-range-10 -> '5' .
-digit-range-10 -> '6' .
-digit-range-10 -> '7' .
-digit-range-10 -> '8' .
-digit-range-10 -> '9' .
-digit -> digit-range-10 .
+symbol-bar-5 -> '"' .
+symbol-bar-5 -> '\'' .
+symbol-bar-6 -> '%' .
+symbol-bar-6 -> symbol-bar-5 .
+symbol-bar-7 -> '_' .
+symbol-bar-7 -> symbol-bar-6 .
+symbol-bar-8 -> ';' .
+symbol-bar-8 -> symbol-bar-7 .
+symbol-bar-9 -> '@' .
+symbol-bar-9 -> symbol-bar-8 .
+symbol-bar-10 -> '#' .
+symbol-bar-10 -> symbol-bar-9 .
+symbol-bar-11 -> ')' .
+symbol-bar-11 -> symbol-bar-10 .
+symbol-bar-12 -> '(' .
+symbol-bar-12 -> symbol-bar-11 .
+symbol-bar-13 -> '-' .
+symbol-bar-13 -> symbol-bar-12 .
+symbol-bar-14 -> '+' .
+symbol-bar-14 -> symbol-bar-13 .
+symbol-bar-15 -> '$' .
+symbol-bar-15 -> symbol-bar-14 .
+symbol-bar-16 -> ',' .
+symbol-bar-16 -> symbol-bar-15 .
+symbol-bar-17 -> '.' .
+symbol-bar-17 -> symbol-bar-16 .
+symbol-bar-18 -> '?' .
+symbol-bar-18 -> symbol-bar-17 .
+symbol-bar-19 -> '!' .
+symbol-bar-19 -> symbol-bar-18 .
+symbol-bar-20 -> ' ' .
+symbol-bar-20 -> symbol-bar-19 .
+symbol -> symbol-bar-20 .
+words-range-21 -> '0' .
+words-range-21 -> '1' .
+words-range-21 -> '2' .
+words-range-21 -> '3' .
+words-range-21 -> '4' .
+words-range-21 -> '5' .
+words-range-21 -> '6' .
+words-range-21 -> '7' .
+words-range-21 -> '8' .
+words-range-21 -> '9' .
+words-range-21 -> 'A' .
+words-range-21 -> 'B' .
+words-range-21 -> 'C' .
+words-range-21 -> 'D' .
+words-range-21 -> 'E' .
+words-range-21 -> 'F' .
+words-range-21 -> 'G' .
+words-range-21 -> 'H' .
+words-range-21 -> 'I' .
+words-range-21 -> 'J' .
+words-range-21 -> 'K' .
+words-range-21 -> 'L' .
+words-range-21 -> 'M' .
+words-range-21 -> 'N' .
+words-range-21 -> 'O' .
+words-range-21 -> 'P' .
+words-range-21 -> 'Q' .
+words-range-21 -> 'R' .
+words-range-21 -> 'S' .
+words-range-21 -> 'T' .
+words-range-21 -> 'U' .
+words-range-21 -> 'V' .
+words-range-21 -> 'W' .
+words-range-21 -> 'X' .
+words-range-21 -> 'Y' .
+words-range-21 -> 'Z' .
+words-range-21 -> 'a' .
+words-range-21 -> 'b' .
+words-range-21 -> 'c' .
+words-range-21 -> 'd' .
+words-range-21 -> 'e' .
+words-range-21 -> 'f' .
+words-range-21 -> 'g' .
+words-range-21 -> 'h' .
+words-range-21 -> 'i' .
+words-range-21 -> 'j' .
+words-range-21 -> 'k' .
+words-range-21 -> 'l' .
+words-range-21 -> 'm' .
+words-range-21 -> 'n' .
+words-range-21 -> 'o' .
+words-range-21 -> 'p' .
+words-range-21 -> 'q' .
+words-range-21 -> 'r' .
+words-range-21 -> 's' .
+words-range-21 -> 't' .
+words-range-21 -> 'u' .
+words-range-21 -> 'v' .
+words-range-21 -> 'w' .
+words-range-21 -> 'x' .
+words-range-21 -> 'y' .
+words-range-21 -> 'z' .
+words-bar-22 -> words-range-21 .
+words-bar-22 -> symbol .
+words-plus-23 -> words-bar-22 .
+words-plus-23 -> words-bar-22 words-plus-23 .
+words -> words-plus-23 .
+digit-range-24 -> '0' .
+digit-range-24 -> '1' .
+digit-range-24 -> '2' .
+digit-range-24 -> '3' .
+digit-range-24 -> '4' .
+digit-range-24 -> '5' .
+digit-range-24 -> '6' .
+digit-range-24 -> '7' .
+digit-range-24 -> '8' .
+digit-range-24 -> '9' .
+digit -> digit-range-24 .
 twodigit -> digit digit .
 month -> twodigit .
 day -> twodigit .
 year -> digit digit digit digit .
-datesep-bar-11 => ',' .
-datesep-bar-11 => ' ' .
-datesep-bar-12 => '.' .
-datesep-bar-12 => datesep-bar-11 .
-datesep-bar-13 => '/' .
-datesep-bar-13 => datesep-bar-12 .
-datesep => datesep-bar-13 .
+datesep-bar-25 => ',' .
+datesep-bar-25 => ' ' .
+datesep-bar-26 => '.' .
+datesep-bar-26 => datesep-bar-25 .
+datesep-bar-27 => '/' .
+datesep-bar-27 => datesep-bar-26 .
+datesep => datesep-bar-27 .
 hour -> twodigit .
 minute -> twodigit .
-am-bar-14 => 'A' 'M' .
-am-bar-14 => 'a' 'm' .
-am => am-bar-14 .
-pm-bar-15 => 'P' 'M' .
-pm-bar-15 => 'p' 'm' .
-pm => pm-bar-15 .
-timesep-bar-16 => 't' 'o' .
-timesep-bar-16 => '-' .
-timesep => timesep-bar-16 .
-alldayA-bar-17 => 'A' 'l' 'l' .
-alldayA-bar-17 => 'A' 'L' 'L' .
-alldayA-bar-18 => 'a' 'l' 'l' .
-alldayA-bar-18 => alldayA-bar-17 .
-alldayA => alldayA-bar-18 .
-alldayD-bar-19 => 'D' 'a' 'y' .
-alldayD-bar-19 => 'D' 'A' 'Y' .
-alldayD-bar-20 => 'd' 'a' 'y' .
-alldayD-bar-20 => alldayD-bar-19 .
-alldayD => alldayD-bar-20 .
+am-bar-28 => 'A' 'M' .
+am-bar-28 => 'a' 'm' .
+am => am-bar-28 .
+pm-bar-29 => 'P' 'M' .
+pm-bar-29 => 'p' 'm' .
+pm => pm-bar-29 .
+timesep-bar-30 => 't' 'o' .
+timesep-bar-30 => '-' .
+timesep => timesep-bar-30 .
+alldayA-bar-31 => 'A' 'l' 'l' .
+alldayA-bar-31 => 'A' 'L' 'L' .
+alldayA-bar-32 => 'a' 'l' 'l' .
+alldayA-bar-32 => alldayA-bar-31 .
+alldayA => alldayA-bar-32 .
+alldayD-bar-33 => 'D' 'a' 'y' .
+alldayD-bar-33 => 'D' 'A' 'Y' .
+alldayD-bar-34 => 'd' 'a' 'y' .
+alldayD-bar-34 => alldayD-bar-33 .
+alldayD => alldayD-bar-34 .
 allday => alldayA ows alldayD .
 
 
@@ -163,16 +194,16 @@ Rules
 
 
 Syntactic non-terminals (defined by syntactic productions):
-  whichm timerange time strt posinfo evtname date 
+  whichm timerange time strt posinfo evtname description date 
 
 Reading non-terminals (defined by lexical ->-productions):
-  year words-range-5 words-plus-9 words-bar-8 words-bar-7 words-bar-6 words twodigit month minute hour digit-range-10 digit day 
+  year words-range-21 words-plus-23 words-bar-22 words twodigit symbol-bar-9 symbol-bar-8 symbol-bar-7 symbol-bar-6 symbol-bar-5 symbol-bar-20 symbol-bar-19 symbol-bar-18 symbol-bar-17 symbol-bar-16 symbol-bar-15 symbol-bar-14 symbol-bar-13 symbol-bar-12 symbol-bar-11 symbol-bar-10 symbol month minute hour digit-range-24 digit day 
 
 Recognizing non-terminals (defined by lexical =>-productions):
-  ws-plus-3 ws timesep-bar-16 timesep pm-bar-15 pm ows-star-4 ows datesep-bar-13 datesep-bar-12 datesep-bar-11 datesep aws-bar-2 aws-bar-1 aws am-bar-14 am alldayD-bar-20 alldayD-bar-19 alldayD alldayA-bar-18 alldayA-bar-17 alldayA allday 
+  ws-plus-3 ws timesep-bar-30 timesep pm-bar-29 pm ows-star-4 ows datesep-bar-27 datesep-bar-26 datesep-bar-25 datesep aws-bar-2 aws-bar-1 aws am-bar-28 am alldayD-bar-34 alldayD-bar-33 alldayD alldayA-bar-32 alldayA-bar-31 alldayA allday 
 
 Terminal symbols:
-  'z' 'y' 'x' 'w' 'v' 'u' 't' 's' 'r' 'q' 'p' 'o' 'n' 'm' 'l' 'k' 'j' 'i' 'h' 'g' 'f' 'e' 'd' 'c' 'b' 'a' '\t' '\n' 'Z' 'Y' 'X' 'W' 'V' 'U' 'T' 'S' 'R' 'Q' 'P' 'O' 'N' 'M' 'L' 'K' 'J' 'I' 'H' 'G' 'F' 'E' 'D' 'C' 'B' 'A' '?' ':' '9' '8' '7' '6' '5' '4' '3' '2' '1' '0' '/' '.' '-' ',' '!' ' ' 
+  'z' 'y' 'x' 'w' 'v' 'u' 't' 's' 'r' 'q' 'p' 'o' 'n' 'm' 'l' 'k' 'j' 'i' 'h' 'g' 'f' 'e' 'd' 'c' 'b' 'a' '_' '\t' '\n' '\'' 'Z' 'Y' 'X' 'W' 'V' 'U' 'T' 'S' 'R' 'Q' 'P' 'O' 'N' 'M' 'L' 'K' 'J' 'I' 'H' 'G' 'F' 'E' 'D' 'C' 'B' 'A' '@' '?' ';' ':' '9' '8' '7' '6' '5' '4' '3' '2' '1' '0' '/' '.' '-' ',' '+' ')' '(' '%' '$' '#' '"' '!' ' ' 
 
 
 
@@ -181,139 +212,170 @@ Terminal symbols:
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
+Description:  words[0] -> description[Description(x0)]
 EventName:  words[0] -> evtname[EventName(x0)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
+NoDescription:  -> description[NoDescription]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
 P10:  #ows-star-4 -> ows[]
-P100:  #datesep-bar-11 -> datesep-bar-12[]
-P101:  #'/' -> datesep-bar-13[]
-P102:  #datesep-bar-12 -> datesep-bar-13[]
-P103:  #datesep-bar-13 -> datesep[]
-P104:  twodigit[0] -> hour[string-append(0, x0)]
-P105:  twodigit[0] -> minute[string-append(0, x0)]
-P106:  #'A' #'M' -> am-bar-14[]
-P107:  #'a' #'m' -> am-bar-14[]
-P108:  #am-bar-14 -> am[]
-P109:  #'P' #'M' -> pm-bar-15[]
-P11:  '0' -> words-range-5[string-append(0, char-to-string('0'))]
-P110:  #'p' #'m' -> pm-bar-15[]
-P111:  #pm-bar-15 -> pm[]
-P112:  #'t' #'o' -> timesep-bar-16[]
-P113:  #'-' -> timesep-bar-16[]
-P114:  #timesep-bar-16 -> timesep[]
-P115:  #'A' #'l' #'l' -> alldayA-bar-17[]
-P116:  #'A' #'L' #'L' -> alldayA-bar-17[]
-P117:  #'a' #'l' #'l' -> alldayA-bar-18[]
-P118:  #alldayA-bar-17 -> alldayA-bar-18[]
-P119:  #alldayA-bar-18 -> alldayA[]
-P12:  '1' -> words-range-5[string-append(0, char-to-string('1'))]
-P120:  #'D' #'a' #'y' -> alldayD-bar-19[]
-P121:  #'D' #'A' #'Y' -> alldayD-bar-19[]
-P122:  #'d' #'a' #'y' -> alldayD-bar-20[]
-P123:  #alldayD-bar-19 -> alldayD-bar-20[]
-P124:  #alldayD-bar-20 -> alldayD[]
-P125:  #alldayA #ows #alldayD -> allday[]
-P13:  '2' -> words-range-5[string-append(0, char-to-string('2'))]
-P14:  '3' -> words-range-5[string-append(0, char-to-string('3'))]
-P15:  '4' -> words-range-5[string-append(0, char-to-string('4'))]
-P16:  '5' -> words-range-5[string-append(0, char-to-string('5'))]
-P17:  '6' -> words-range-5[string-append(0, char-to-string('6'))]
-P18:  '7' -> words-range-5[string-append(0, char-to-string('7'))]
-P19:  '8' -> words-range-5[string-append(0, char-to-string('8'))]
+P100:  'u' -> words-range-21[string-append(0, char-to-string('u'))]
+P101:  'v' -> words-range-21[string-append(0, char-to-string('v'))]
+P102:  'w' -> words-range-21[string-append(0, char-to-string('w'))]
+P103:  'x' -> words-range-21[string-append(0, char-to-string('x'))]
+P104:  'y' -> words-range-21[string-append(0, char-to-string('y'))]
+P105:  'z' -> words-range-21[string-append(0, char-to-string('z'))]
+P106:  words-range-21[0] -> words-bar-22[string-append(0, x0)]
+P107:  symbol[0] -> words-bar-22[string-append(0, x0)]
+P108:  words-bar-22[0] -> words-plus-23[string-append(0, x0)]
+P109:  words-bar-22[0] words-plus-23[1] -> words-plus-23[string-append(1, x0, x1)]
+P11:  '"' -> symbol-bar-5[string-append(0, char-to-string('"'))]
+P110:  words-plus-23[0] -> words[string-append(0, x0)]
+P111:  '0' -> digit-range-24[string-append(0, char-to-string('0'))]
+P112:  '1' -> digit-range-24[string-append(0, char-to-string('1'))]
+P113:  '2' -> digit-range-24[string-append(0, char-to-string('2'))]
+P114:  '3' -> digit-range-24[string-append(0, char-to-string('3'))]
+P115:  '4' -> digit-range-24[string-append(0, char-to-string('4'))]
+P116:  '5' -> digit-range-24[string-append(0, char-to-string('5'))]
+P117:  '6' -> digit-range-24[string-append(0, char-to-string('6'))]
+P118:  '7' -> digit-range-24[string-append(0, char-to-string('7'))]
+P119:  '8' -> digit-range-24[string-append(0, char-to-string('8'))]
+P12:  '\'' -> symbol-bar-5[string-append(0, char-to-string('\''))]
+P120:  '9' -> digit-range-24[string-append(0, char-to-string('9'))]
+P121:  digit-range-24[0] -> digit[string-append(0, x0)]
+P122:  digit[0] digit[1] -> twodigit[string-append(1, x0, x1)]
+P123:  twodigit[0] -> month[string-append(0, x0)]
+P124:  twodigit[0] -> day[string-append(0, x0)]
+P125:  digit[0] digit[1] digit[2] digit[3] -> year[string-append(3, x0, x1, x2, x3)]
+P126:  #',' -> datesep-bar-25[]
+P127:  #' ' -> datesep-bar-25[]
+P128:  #'.' -> datesep-bar-26[]
+P129:  #datesep-bar-25 -> datesep-bar-26[]
+P13:  '%' -> symbol-bar-6[string-append(0, char-to-string('%'))]
+P130:  #'/' -> datesep-bar-27[]
+P131:  #datesep-bar-26 -> datesep-bar-27[]
+P132:  #datesep-bar-27 -> datesep[]
+P133:  twodigit[0] -> hour[string-append(0, x0)]
+P134:  twodigit[0] -> minute[string-append(0, x0)]
+P135:  #'A' #'M' -> am-bar-28[]
+P136:  #'a' #'m' -> am-bar-28[]
+P137:  #am-bar-28 -> am[]
+P138:  #'P' #'M' -> pm-bar-29[]
+P139:  #'p' #'m' -> pm-bar-29[]
+P14:  symbol-bar-5[0] -> symbol-bar-6[string-append(0, x0)]
+P140:  #pm-bar-29 -> pm[]
+P141:  #'t' #'o' -> timesep-bar-30[]
+P142:  #'-' -> timesep-bar-30[]
+P143:  #timesep-bar-30 -> timesep[]
+P144:  #'A' #'l' #'l' -> alldayA-bar-31[]
+P145:  #'A' #'L' #'L' -> alldayA-bar-31[]
+P146:  #'a' #'l' #'l' -> alldayA-bar-32[]
+P147:  #alldayA-bar-31 -> alldayA-bar-32[]
+P148:  #alldayA-bar-32 -> alldayA[]
+P149:  #'D' #'a' #'y' -> alldayD-bar-33[]
+P15:  '_' -> symbol-bar-7[string-append(0, char-to-string('_'))]
+P150:  #'D' #'A' #'Y' -> alldayD-bar-33[]
+P151:  #'d' #'a' #'y' -> alldayD-bar-34[]
+P152:  #alldayD-bar-33 -> alldayD-bar-34[]
+P153:  #alldayD-bar-34 -> alldayD[]
+P154:  #alldayA #ows #alldayD -> allday[]
+P16:  symbol-bar-6[0] -> symbol-bar-7[string-append(0, x0)]
+P17:  ';' -> symbol-bar-8[string-append(0, char-to-string(';'))]
+P18:  symbol-bar-7[0] -> symbol-bar-8[string-append(0, x0)]
+P19:  '@' -> symbol-bar-9[string-append(0, char-to-string('@'))]
 P2:  #'\n' -> aws-bar-2[]
-P20:  '9' -> words-range-5[string-append(0, char-to-string('9'))]
-P21:  'A' -> words-range-5[string-append(0, char-to-string('A'))]
-P22:  'B' -> words-range-5[string-append(0, char-to-string('B'))]
-P23:  'C' -> words-range-5[string-append(0, char-to-string('C'))]
-P24:  'D' -> words-range-5[string-append(0, char-to-string('D'))]
-P25:  'E' -> words-range-5[string-append(0, char-to-string('E'))]
-P26:  'F' -> words-range-5[string-append(0, char-to-string('F'))]
-P27:  'G' -> words-range-5[string-append(0, char-to-string('G'))]
-P28:  'H' -> words-range-5[string-append(0, char-to-string('H'))]
-P29:  'I' -> words-range-5[string-append(0, char-to-string('I'))]
+P20:  symbol-bar-8[0] -> symbol-bar-9[string-append(0, x0)]
+P21:  '#' -> symbol-bar-10[string-append(0, char-to-string('#'))]
+P22:  symbol-bar-9[0] -> symbol-bar-10[string-append(0, x0)]
+P23:  ')' -> symbol-bar-11[string-append(0, char-to-string(')'))]
+P24:  symbol-bar-10[0] -> symbol-bar-11[string-append(0, x0)]
+P25:  '(' -> symbol-bar-12[string-append(0, char-to-string('('))]
+P26:  symbol-bar-11[0] -> symbol-bar-12[string-append(0, x0)]
+P27:  '-' -> symbol-bar-13[string-append(0, char-to-string('-'))]
+P28:  symbol-bar-12[0] -> symbol-bar-13[string-append(0, x0)]
+P29:  '+' -> symbol-bar-14[string-append(0, char-to-string('+'))]
 P3:  #aws-bar-1 -> aws-bar-2[]
-P30:  'J' -> words-range-5[string-append(0, char-to-string('J'))]
-P31:  'K' -> words-range-5[string-append(0, char-to-string('K'))]
-P32:  'L' -> words-range-5[string-append(0, char-to-string('L'))]
-P33:  'M' -> words-range-5[string-append(0, char-to-string('M'))]
-P34:  'N' -> words-range-5[string-append(0, char-to-string('N'))]
-P35:  'O' -> words-range-5[string-append(0, char-to-string('O'))]
-P36:  'P' -> words-range-5[string-append(0, char-to-string('P'))]
-P37:  'Q' -> words-range-5[string-append(0, char-to-string('Q'))]
-P38:  'R' -> words-range-5[string-append(0, char-to-string('R'))]
-P39:  'S' -> words-range-5[string-append(0, char-to-string('S'))]
+P30:  symbol-bar-13[0] -> symbol-bar-14[string-append(0, x0)]
+P31:  '$' -> symbol-bar-15[string-append(0, char-to-string('$'))]
+P32:  symbol-bar-14[0] -> symbol-bar-15[string-append(0, x0)]
+P33:  ',' -> symbol-bar-16[string-append(0, char-to-string(','))]
+P34:  symbol-bar-15[0] -> symbol-bar-16[string-append(0, x0)]
+P35:  '.' -> symbol-bar-17[string-append(0, char-to-string('.'))]
+P36:  symbol-bar-16[0] -> symbol-bar-17[string-append(0, x0)]
+P37:  '?' -> symbol-bar-18[string-append(0, char-to-string('?'))]
+P38:  symbol-bar-17[0] -> symbol-bar-18[string-append(0, x0)]
+P39:  '!' -> symbol-bar-19[string-append(0, char-to-string('!'))]
 P4:  #aws-bar-2 -> aws[]
-P40:  'T' -> words-range-5[string-append(0, char-to-string('T'))]
-P41:  'U' -> words-range-5[string-append(0, char-to-string('U'))]
-P42:  'V' -> words-range-5[string-append(0, char-to-string('V'))]
-P43:  'W' -> words-range-5[string-append(0, char-to-string('W'))]
-P44:  'X' -> words-range-5[string-append(0, char-to-string('X'))]
-P45:  'Y' -> words-range-5[string-append(0, char-to-string('Y'))]
-P46:  'Z' -> words-range-5[string-append(0, char-to-string('Z'))]
-P47:  'a' -> words-range-5[string-append(0, char-to-string('a'))]
-P48:  'b' -> words-range-5[string-append(0, char-to-string('b'))]
-P49:  'c' -> words-range-5[string-append(0, char-to-string('c'))]
+P40:  symbol-bar-18[0] -> symbol-bar-19[string-append(0, x0)]
+P41:  ' ' -> symbol-bar-20[string-append(0, char-to-string(' '))]
+P42:  symbol-bar-19[0] -> symbol-bar-20[string-append(0, x0)]
+P43:  symbol-bar-20[0] -> symbol[string-append(0, x0)]
+P44:  '0' -> words-range-21[string-append(0, char-to-string('0'))]
+P45:  '1' -> words-range-21[string-append(0, char-to-string('1'))]
+P46:  '2' -> words-range-21[string-append(0, char-to-string('2'))]
+P47:  '3' -> words-range-21[string-append(0, char-to-string('3'))]
+P48:  '4' -> words-range-21[string-append(0, char-to-string('4'))]
+P49:  '5' -> words-range-21[string-append(0, char-to-string('5'))]
 P5:  #aws -> ws-plus-3[]
-P50:  'd' -> words-range-5[string-append(0, char-to-string('d'))]
-P51:  'e' -> words-range-5[string-append(0, char-to-string('e'))]
-P52:  'f' -> words-range-5[string-append(0, char-to-string('f'))]
-P53:  'g' -> words-range-5[string-append(0, char-to-string('g'))]
-P54:  'h' -> words-range-5[string-append(0, char-to-string('h'))]
-P55:  'i' -> words-range-5[string-append(0, char-to-string('i'))]
-P56:  'j' -> words-range-5[string-append(0, char-to-string('j'))]
-P57:  'k' -> words-range-5[string-append(0, char-to-string('k'))]
-P58:  'l' -> words-range-5[string-append(0, char-to-string('l'))]
-P59:  'm' -> words-range-5[string-append(0, char-to-string('m'))]
+P50:  '6' -> words-range-21[string-append(0, char-to-string('6'))]
+P51:  '7' -> words-range-21[string-append(0, char-to-string('7'))]
+P52:  '8' -> words-range-21[string-append(0, char-to-string('8'))]
+P53:  '9' -> words-range-21[string-append(0, char-to-string('9'))]
+P54:  'A' -> words-range-21[string-append(0, char-to-string('A'))]
+P55:  'B' -> words-range-21[string-append(0, char-to-string('B'))]
+P56:  'C' -> words-range-21[string-append(0, char-to-string('C'))]
+P57:  'D' -> words-range-21[string-append(0, char-to-string('D'))]
+P58:  'E' -> words-range-21[string-append(0, char-to-string('E'))]
+P59:  'F' -> words-range-21[string-append(0, char-to-string('F'))]
 P6:  #aws #ws-plus-3 -> ws-plus-3[]
-P60:  'n' -> words-range-5[string-append(0, char-to-string('n'))]
-P61:  'o' -> words-range-5[string-append(0, char-to-string('o'))]
-P62:  'p' -> words-range-5[string-append(0, char-to-string('p'))]
-P63:  'q' -> words-range-5[string-append(0, char-to-string('q'))]
-P64:  'r' -> words-range-5[string-append(0, char-to-string('r'))]
-P65:  's' -> words-range-5[string-append(0, char-to-string('s'))]
-P66:  't' -> words-range-5[string-append(0, char-to-string('t'))]
-P67:  'u' -> words-range-5[string-append(0, char-to-string('u'))]
-P68:  'v' -> words-range-5[string-append(0, char-to-string('v'))]
-P69:  'w' -> words-range-5[string-append(0, char-to-string('w'))]
+P60:  'G' -> words-range-21[string-append(0, char-to-string('G'))]
+P61:  'H' -> words-range-21[string-append(0, char-to-string('H'))]
+P62:  'I' -> words-range-21[string-append(0, char-to-string('I'))]
+P63:  'J' -> words-range-21[string-append(0, char-to-string('J'))]
+P64:  'K' -> words-range-21[string-append(0, char-to-string('K'))]
+P65:  'L' -> words-range-21[string-append(0, char-to-string('L'))]
+P66:  'M' -> words-range-21[string-append(0, char-to-string('M'))]
+P67:  'N' -> words-range-21[string-append(0, char-to-string('N'))]
+P68:  'O' -> words-range-21[string-append(0, char-to-string('O'))]
+P69:  'P' -> words-range-21[string-append(0, char-to-string('P'))]
 P7:  #ws-plus-3 -> ws[]
-P70:  'x' -> words-range-5[string-append(0, char-to-string('x'))]
-P71:  'y' -> words-range-5[string-append(0, char-to-string('y'))]
-P72:  'z' -> words-range-5[string-append(0, char-to-string('z'))]
-P73:  '!' -> words-bar-6[string-append(0, char-to-string('!'))]
-P74:  '?' -> words-bar-6[string-append(0, char-to-string('?'))]
-P75:  ' ' -> words-bar-7[string-append(0, char-to-string(' '))]
-P76:  words-bar-6[0] -> words-bar-7[string-append(0, x0)]
-P77:  words-range-5[0] -> words-bar-8[string-append(0, x0)]
-P78:  words-bar-7[0] -> words-bar-8[string-append(0, x0)]
-P79:  words-bar-8[0] -> words-plus-9[string-append(0, x0)]
+P70:  'Q' -> words-range-21[string-append(0, char-to-string('Q'))]
+P71:  'R' -> words-range-21[string-append(0, char-to-string('R'))]
+P72:  'S' -> words-range-21[string-append(0, char-to-string('S'))]
+P73:  'T' -> words-range-21[string-append(0, char-to-string('T'))]
+P74:  'U' -> words-range-21[string-append(0, char-to-string('U'))]
+P75:  'V' -> words-range-21[string-append(0, char-to-string('V'))]
+P76:  'W' -> words-range-21[string-append(0, char-to-string('W'))]
+P77:  'X' -> words-range-21[string-append(0, char-to-string('X'))]
+P78:  'Y' -> words-range-21[string-append(0, char-to-string('Y'))]
+P79:  'Z' -> words-range-21[string-append(0, char-to-string('Z'))]
 P8:  -> ows-star-4[]
-P80:  words-bar-8[0] words-plus-9[1] -> words-plus-9[string-append(1, x0, x1)]
-P81:  words-plus-9[0] -> words[string-append(0, x0)]
-P82:  '0' -> digit-range-10[string-append(0, char-to-string('0'))]
-P83:  '1' -> digit-range-10[string-append(0, char-to-string('1'))]
-P84:  '2' -> digit-range-10[string-append(0, char-to-string('2'))]
-P85:  '3' -> digit-range-10[string-append(0, char-to-string('3'))]
-P86:  '4' -> digit-range-10[string-append(0, char-to-string('4'))]
-P87:  '5' -> digit-range-10[string-append(0, char-to-string('5'))]
-P88:  '6' -> digit-range-10[string-append(0, char-to-string('6'))]
-P89:  '7' -> digit-range-10[string-append(0, char-to-string('7'))]
+P80:  'a' -> words-range-21[string-append(0, char-to-string('a'))]
+P81:  'b' -> words-range-21[string-append(0, char-to-string('b'))]
+P82:  'c' -> words-range-21[string-append(0, char-to-string('c'))]
+P83:  'd' -> words-range-21[string-append(0, char-to-string('d'))]
+P84:  'e' -> words-range-21[string-append(0, char-to-string('e'))]
+P85:  'f' -> words-range-21[string-append(0, char-to-string('f'))]
+P86:  'g' -> words-range-21[string-append(0, char-to-string('g'))]
+P87:  'h' -> words-range-21[string-append(0, char-to-string('h'))]
+P88:  'i' -> words-range-21[string-append(0, char-to-string('i'))]
+P89:  'j' -> words-range-21[string-append(0, char-to-string('j'))]
 P9:  #aws #ows-star-4 -> ows-star-4[]
-P90:  '8' -> digit-range-10[string-append(0, char-to-string('8'))]
-P91:  '9' -> digit-range-10[string-append(0, char-to-string('9'))]
-P92:  digit-range-10[0] -> digit[string-append(0, x0)]
-P93:  digit[0] digit[1] -> twodigit[string-append(1, x0, x1)]
-P94:  twodigit[0] -> month[string-append(0, x0)]
-P95:  twodigit[0] -> day[string-append(0, x0)]
-P96:  digit[0] digit[1] digit[2] digit[3] -> year[string-append(3, x0, x1, x2, x3)]
-P97:  #',' -> datesep-bar-11[]
-P98:  #' ' -> datesep-bar-11[]
-P99:  #'.' -> datesep-bar-12[]
+P90:  'k' -> words-range-21[string-append(0, char-to-string('k'))]
+P91:  'l' -> words-range-21[string-append(0, char-to-string('l'))]
+P92:  'm' -> words-range-21[string-append(0, char-to-string('m'))]
+P93:  'n' -> words-range-21[string-append(0, char-to-string('n'))]
+P94:  'o' -> words-range-21[string-append(0, char-to-string('o'))]
+P95:  'p' -> words-range-21[string-append(0, char-to-string('p'))]
+P96:  'q' -> words-range-21[string-append(0, char-to-string('q'))]
+P97:  'r' -> words-range-21[string-append(0, char-to-string('r'))]
+P98:  's' -> words-range-21[string-append(0, char-to-string('s'))]
+P99:  't' -> words-range-21[string-append(0, char-to-string('t'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows -> strt[Strt(x0, x1, x2)]
+Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows description[3] #ows -> strt[Strt(x0, x1, x2, x3)]
 TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
@@ -321,7 +383,8 @@ TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
 (Derivational complexity of the reorganizing TRS: O(n^0))
 (Local confluence of the reorganizing TRS: true)
 
-(Time elapsed: 0.009)
+(Time elapsed: 0.013)
+Found nullable (description, NoDescription)
 Found nullable (ows-star-4, P8)
 Found nullable (posinfo, Posinfo)
 Found nullable (ows, P10)
@@ -331,139 +394,170 @@ Found nullable (ows, P10)
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
+Description:  words[0] -> description[Description(x0)]
 EventName:  words[0] -> evtname[EventName(x0)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
+NoDescription:  -> description[NoDescription]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
 P10:  #ows-star-4 -> ows[]
-P100:  #datesep-bar-11 -> datesep-bar-12[]
-P101:  #'/' -> datesep-bar-13[]
-P102:  #datesep-bar-12 -> datesep-bar-13[]
-P103:  #datesep-bar-13 -> datesep[]
-P104:  twodigit[0] -> hour[string-append(0, x0)]
-P105:  twodigit[0] -> minute[string-append(0, x0)]
-P106:  #'A' #'M' -> am-bar-14[]
-P107:  #'a' #'m' -> am-bar-14[]
-P108:  #am-bar-14 -> am[]
-P109:  #'P' #'M' -> pm-bar-15[]
-P11:  '0' -> words-range-5[string-append(0, char-to-string('0'))]
-P110:  #'p' #'m' -> pm-bar-15[]
-P111:  #pm-bar-15 -> pm[]
-P112:  #'t' #'o' -> timesep-bar-16[]
-P113:  #'-' -> timesep-bar-16[]
-P114:  #timesep-bar-16 -> timesep[]
-P115:  #'A' #'l' #'l' -> alldayA-bar-17[]
-P116:  #'A' #'L' #'L' -> alldayA-bar-17[]
-P117:  #'a' #'l' #'l' -> alldayA-bar-18[]
-P118:  #alldayA-bar-17 -> alldayA-bar-18[]
-P119:  #alldayA-bar-18 -> alldayA[]
-P12:  '1' -> words-range-5[string-append(0, char-to-string('1'))]
-P120:  #'D' #'a' #'y' -> alldayD-bar-19[]
-P121:  #'D' #'A' #'Y' -> alldayD-bar-19[]
-P122:  #'d' #'a' #'y' -> alldayD-bar-20[]
-P123:  #alldayD-bar-19 -> alldayD-bar-20[]
-P124:  #alldayD-bar-20 -> alldayD[]
-P125:  #alldayA #ows #alldayD -> allday[]
-P13:  '2' -> words-range-5[string-append(0, char-to-string('2'))]
-P14:  '3' -> words-range-5[string-append(0, char-to-string('3'))]
-P15:  '4' -> words-range-5[string-append(0, char-to-string('4'))]
-P16:  '5' -> words-range-5[string-append(0, char-to-string('5'))]
-P17:  '6' -> words-range-5[string-append(0, char-to-string('6'))]
-P18:  '7' -> words-range-5[string-append(0, char-to-string('7'))]
-P19:  '8' -> words-range-5[string-append(0, char-to-string('8'))]
+P100:  'u' -> words-range-21[string-append(0, char-to-string('u'))]
+P101:  'v' -> words-range-21[string-append(0, char-to-string('v'))]
+P102:  'w' -> words-range-21[string-append(0, char-to-string('w'))]
+P103:  'x' -> words-range-21[string-append(0, char-to-string('x'))]
+P104:  'y' -> words-range-21[string-append(0, char-to-string('y'))]
+P105:  'z' -> words-range-21[string-append(0, char-to-string('z'))]
+P106:  words-range-21[0] -> words-bar-22[string-append(0, x0)]
+P107:  symbol[0] -> words-bar-22[string-append(0, x0)]
+P108:  words-bar-22[0] -> words-plus-23[string-append(0, x0)]
+P109:  words-bar-22[0] words-plus-23[1] -> words-plus-23[string-append(1, x0, x1)]
+P11:  '"' -> symbol-bar-5[string-append(0, char-to-string('"'))]
+P110:  words-plus-23[0] -> words[string-append(0, x0)]
+P111:  '0' -> digit-range-24[string-append(0, char-to-string('0'))]
+P112:  '1' -> digit-range-24[string-append(0, char-to-string('1'))]
+P113:  '2' -> digit-range-24[string-append(0, char-to-string('2'))]
+P114:  '3' -> digit-range-24[string-append(0, char-to-string('3'))]
+P115:  '4' -> digit-range-24[string-append(0, char-to-string('4'))]
+P116:  '5' -> digit-range-24[string-append(0, char-to-string('5'))]
+P117:  '6' -> digit-range-24[string-append(0, char-to-string('6'))]
+P118:  '7' -> digit-range-24[string-append(0, char-to-string('7'))]
+P119:  '8' -> digit-range-24[string-append(0, char-to-string('8'))]
+P12:  '\'' -> symbol-bar-5[string-append(0, char-to-string('\''))]
+P120:  '9' -> digit-range-24[string-append(0, char-to-string('9'))]
+P121:  digit-range-24[0] -> digit[string-append(0, x0)]
+P122:  digit[0] digit[1] -> twodigit[string-append(1, x0, x1)]
+P123:  twodigit[0] -> month[string-append(0, x0)]
+P124:  twodigit[0] -> day[string-append(0, x0)]
+P125:  digit[0] digit[1] digit[2] digit[3] -> year[string-append(3, x0, x1, x2, x3)]
+P126:  #',' -> datesep-bar-25[]
+P127:  #' ' -> datesep-bar-25[]
+P128:  #'.' -> datesep-bar-26[]
+P129:  #datesep-bar-25 -> datesep-bar-26[]
+P13:  '%' -> symbol-bar-6[string-append(0, char-to-string('%'))]
+P130:  #'/' -> datesep-bar-27[]
+P131:  #datesep-bar-26 -> datesep-bar-27[]
+P132:  #datesep-bar-27 -> datesep[]
+P133:  twodigit[0] -> hour[string-append(0, x0)]
+P134:  twodigit[0] -> minute[string-append(0, x0)]
+P135:  #'A' #'M' -> am-bar-28[]
+P136:  #'a' #'m' -> am-bar-28[]
+P137:  #am-bar-28 -> am[]
+P138:  #'P' #'M' -> pm-bar-29[]
+P139:  #'p' #'m' -> pm-bar-29[]
+P14:  symbol-bar-5[0] -> symbol-bar-6[string-append(0, x0)]
+P140:  #pm-bar-29 -> pm[]
+P141:  #'t' #'o' -> timesep-bar-30[]
+P142:  #'-' -> timesep-bar-30[]
+P143:  #timesep-bar-30 -> timesep[]
+P144:  #'A' #'l' #'l' -> alldayA-bar-31[]
+P145:  #'A' #'L' #'L' -> alldayA-bar-31[]
+P146:  #'a' #'l' #'l' -> alldayA-bar-32[]
+P147:  #alldayA-bar-31 -> alldayA-bar-32[]
+P148:  #alldayA-bar-32 -> alldayA[]
+P149:  #'D' #'a' #'y' -> alldayD-bar-33[]
+P15:  '_' -> symbol-bar-7[string-append(0, char-to-string('_'))]
+P150:  #'D' #'A' #'Y' -> alldayD-bar-33[]
+P151:  #'d' #'a' #'y' -> alldayD-bar-34[]
+P152:  #alldayD-bar-33 -> alldayD-bar-34[]
+P153:  #alldayD-bar-34 -> alldayD[]
+P154:  #alldayA #ows #alldayD -> allday[]
+P16:  symbol-bar-6[0] -> symbol-bar-7[string-append(0, x0)]
+P17:  ';' -> symbol-bar-8[string-append(0, char-to-string(';'))]
+P18:  symbol-bar-7[0] -> symbol-bar-8[string-append(0, x0)]
+P19:  '@' -> symbol-bar-9[string-append(0, char-to-string('@'))]
 P2:  #'\n' -> aws-bar-2[]
-P20:  '9' -> words-range-5[string-append(0, char-to-string('9'))]
-P21:  'A' -> words-range-5[string-append(0, char-to-string('A'))]
-P22:  'B' -> words-range-5[string-append(0, char-to-string('B'))]
-P23:  'C' -> words-range-5[string-append(0, char-to-string('C'))]
-P24:  'D' -> words-range-5[string-append(0, char-to-string('D'))]
-P25:  'E' -> words-range-5[string-append(0, char-to-string('E'))]
-P26:  'F' -> words-range-5[string-append(0, char-to-string('F'))]
-P27:  'G' -> words-range-5[string-append(0, char-to-string('G'))]
-P28:  'H' -> words-range-5[string-append(0, char-to-string('H'))]
-P29:  'I' -> words-range-5[string-append(0, char-to-string('I'))]
+P20:  symbol-bar-8[0] -> symbol-bar-9[string-append(0, x0)]
+P21:  '#' -> symbol-bar-10[string-append(0, char-to-string('#'))]
+P22:  symbol-bar-9[0] -> symbol-bar-10[string-append(0, x0)]
+P23:  ')' -> symbol-bar-11[string-append(0, char-to-string(')'))]
+P24:  symbol-bar-10[0] -> symbol-bar-11[string-append(0, x0)]
+P25:  '(' -> symbol-bar-12[string-append(0, char-to-string('('))]
+P26:  symbol-bar-11[0] -> symbol-bar-12[string-append(0, x0)]
+P27:  '-' -> symbol-bar-13[string-append(0, char-to-string('-'))]
+P28:  symbol-bar-12[0] -> symbol-bar-13[string-append(0, x0)]
+P29:  '+' -> symbol-bar-14[string-append(0, char-to-string('+'))]
 P3:  #aws-bar-1 -> aws-bar-2[]
-P30:  'J' -> words-range-5[string-append(0, char-to-string('J'))]
-P31:  'K' -> words-range-5[string-append(0, char-to-string('K'))]
-P32:  'L' -> words-range-5[string-append(0, char-to-string('L'))]
-P33:  'M' -> words-range-5[string-append(0, char-to-string('M'))]
-P34:  'N' -> words-range-5[string-append(0, char-to-string('N'))]
-P35:  'O' -> words-range-5[string-append(0, char-to-string('O'))]
-P36:  'P' -> words-range-5[string-append(0, char-to-string('P'))]
-P37:  'Q' -> words-range-5[string-append(0, char-to-string('Q'))]
-P38:  'R' -> words-range-5[string-append(0, char-to-string('R'))]
-P39:  'S' -> words-range-5[string-append(0, char-to-string('S'))]
+P30:  symbol-bar-13[0] -> symbol-bar-14[string-append(0, x0)]
+P31:  '$' -> symbol-bar-15[string-append(0, char-to-string('$'))]
+P32:  symbol-bar-14[0] -> symbol-bar-15[string-append(0, x0)]
+P33:  ',' -> symbol-bar-16[string-append(0, char-to-string(','))]
+P34:  symbol-bar-15[0] -> symbol-bar-16[string-append(0, x0)]
+P35:  '.' -> symbol-bar-17[string-append(0, char-to-string('.'))]
+P36:  symbol-bar-16[0] -> symbol-bar-17[string-append(0, x0)]
+P37:  '?' -> symbol-bar-18[string-append(0, char-to-string('?'))]
+P38:  symbol-bar-17[0] -> symbol-bar-18[string-append(0, x0)]
+P39:  '!' -> symbol-bar-19[string-append(0, char-to-string('!'))]
 P4:  #aws-bar-2 -> aws[]
-P40:  'T' -> words-range-5[string-append(0, char-to-string('T'))]
-P41:  'U' -> words-range-5[string-append(0, char-to-string('U'))]
-P42:  'V' -> words-range-5[string-append(0, char-to-string('V'))]
-P43:  'W' -> words-range-5[string-append(0, char-to-string('W'))]
-P44:  'X' -> words-range-5[string-append(0, char-to-string('X'))]
-P45:  'Y' -> words-range-5[string-append(0, char-to-string('Y'))]
-P46:  'Z' -> words-range-5[string-append(0, char-to-string('Z'))]
-P47:  'a' -> words-range-5[string-append(0, char-to-string('a'))]
-P48:  'b' -> words-range-5[string-append(0, char-to-string('b'))]
-P49:  'c' -> words-range-5[string-append(0, char-to-string('c'))]
+P40:  symbol-bar-18[0] -> symbol-bar-19[string-append(0, x0)]
+P41:  ' ' -> symbol-bar-20[string-append(0, char-to-string(' '))]
+P42:  symbol-bar-19[0] -> symbol-bar-20[string-append(0, x0)]
+P43:  symbol-bar-20[0] -> symbol[string-append(0, x0)]
+P44:  '0' -> words-range-21[string-append(0, char-to-string('0'))]
+P45:  '1' -> words-range-21[string-append(0, char-to-string('1'))]
+P46:  '2' -> words-range-21[string-append(0, char-to-string('2'))]
+P47:  '3' -> words-range-21[string-append(0, char-to-string('3'))]
+P48:  '4' -> words-range-21[string-append(0, char-to-string('4'))]
+P49:  '5' -> words-range-21[string-append(0, char-to-string('5'))]
 P5:  #aws -> ws-plus-3[]
-P50:  'd' -> words-range-5[string-append(0, char-to-string('d'))]
-P51:  'e' -> words-range-5[string-append(0, char-to-string('e'))]
-P52:  'f' -> words-range-5[string-append(0, char-to-string('f'))]
-P53:  'g' -> words-range-5[string-append(0, char-to-string('g'))]
-P54:  'h' -> words-range-5[string-append(0, char-to-string('h'))]
-P55:  'i' -> words-range-5[string-append(0, char-to-string('i'))]
-P56:  'j' -> words-range-5[string-append(0, char-to-string('j'))]
-P57:  'k' -> words-range-5[string-append(0, char-to-string('k'))]
-P58:  'l' -> words-range-5[string-append(0, char-to-string('l'))]
-P59:  'm' -> words-range-5[string-append(0, char-to-string('m'))]
+P50:  '6' -> words-range-21[string-append(0, char-to-string('6'))]
+P51:  '7' -> words-range-21[string-append(0, char-to-string('7'))]
+P52:  '8' -> words-range-21[string-append(0, char-to-string('8'))]
+P53:  '9' -> words-range-21[string-append(0, char-to-string('9'))]
+P54:  'A' -> words-range-21[string-append(0, char-to-string('A'))]
+P55:  'B' -> words-range-21[string-append(0, char-to-string('B'))]
+P56:  'C' -> words-range-21[string-append(0, char-to-string('C'))]
+P57:  'D' -> words-range-21[string-append(0, char-to-string('D'))]
+P58:  'E' -> words-range-21[string-append(0, char-to-string('E'))]
+P59:  'F' -> words-range-21[string-append(0, char-to-string('F'))]
 P6:  #aws #ws-plus-3 -> ws-plus-3[]
-P60:  'n' -> words-range-5[string-append(0, char-to-string('n'))]
-P61:  'o' -> words-range-5[string-append(0, char-to-string('o'))]
-P62:  'p' -> words-range-5[string-append(0, char-to-string('p'))]
-P63:  'q' -> words-range-5[string-append(0, char-to-string('q'))]
-P64:  'r' -> words-range-5[string-append(0, char-to-string('r'))]
-P65:  's' -> words-range-5[string-append(0, char-to-string('s'))]
-P66:  't' -> words-range-5[string-append(0, char-to-string('t'))]
-P67:  'u' -> words-range-5[string-append(0, char-to-string('u'))]
-P68:  'v' -> words-range-5[string-append(0, char-to-string('v'))]
-P69:  'w' -> words-range-5[string-append(0, char-to-string('w'))]
+P60:  'G' -> words-range-21[string-append(0, char-to-string('G'))]
+P61:  'H' -> words-range-21[string-append(0, char-to-string('H'))]
+P62:  'I' -> words-range-21[string-append(0, char-to-string('I'))]
+P63:  'J' -> words-range-21[string-append(0, char-to-string('J'))]
+P64:  'K' -> words-range-21[string-append(0, char-to-string('K'))]
+P65:  'L' -> words-range-21[string-append(0, char-to-string('L'))]
+P66:  'M' -> words-range-21[string-append(0, char-to-string('M'))]
+P67:  'N' -> words-range-21[string-append(0, char-to-string('N'))]
+P68:  'O' -> words-range-21[string-append(0, char-to-string('O'))]
+P69:  'P' -> words-range-21[string-append(0, char-to-string('P'))]
 P7:  #ws-plus-3 -> ws[]
-P70:  'x' -> words-range-5[string-append(0, char-to-string('x'))]
-P71:  'y' -> words-range-5[string-append(0, char-to-string('y'))]
-P72:  'z' -> words-range-5[string-append(0, char-to-string('z'))]
-P73:  '!' -> words-bar-6[string-append(0, char-to-string('!'))]
-P74:  '?' -> words-bar-6[string-append(0, char-to-string('?'))]
-P75:  ' ' -> words-bar-7[string-append(0, char-to-string(' '))]
-P76:  words-bar-6[0] -> words-bar-7[string-append(0, x0)]
-P77:  words-range-5[0] -> words-bar-8[string-append(0, x0)]
-P78:  words-bar-7[0] -> words-bar-8[string-append(0, x0)]
-P79:  words-bar-8[0] -> words-plus-9[string-append(0, x0)]
+P70:  'Q' -> words-range-21[string-append(0, char-to-string('Q'))]
+P71:  'R' -> words-range-21[string-append(0, char-to-string('R'))]
+P72:  'S' -> words-range-21[string-append(0, char-to-string('S'))]
+P73:  'T' -> words-range-21[string-append(0, char-to-string('T'))]
+P74:  'U' -> words-range-21[string-append(0, char-to-string('U'))]
+P75:  'V' -> words-range-21[string-append(0, char-to-string('V'))]
+P76:  'W' -> words-range-21[string-append(0, char-to-string('W'))]
+P77:  'X' -> words-range-21[string-append(0, char-to-string('X'))]
+P78:  'Y' -> words-range-21[string-append(0, char-to-string('Y'))]
+P79:  'Z' -> words-range-21[string-append(0, char-to-string('Z'))]
 P8:  -> ows-star-4[]
-P80:  words-bar-8[0] words-plus-9[1] -> words-plus-9[string-append(1, x0, x1)]
-P81:  words-plus-9[0] -> words[string-append(0, x0)]
-P82:  '0' -> digit-range-10[string-append(0, char-to-string('0'))]
-P83:  '1' -> digit-range-10[string-append(0, char-to-string('1'))]
-P84:  '2' -> digit-range-10[string-append(0, char-to-string('2'))]
-P85:  '3' -> digit-range-10[string-append(0, char-to-string('3'))]
-P86:  '4' -> digit-range-10[string-append(0, char-to-string('4'))]
-P87:  '5' -> digit-range-10[string-append(0, char-to-string('5'))]
-P88:  '6' -> digit-range-10[string-append(0, char-to-string('6'))]
-P89:  '7' -> digit-range-10[string-append(0, char-to-string('7'))]
+P80:  'a' -> words-range-21[string-append(0, char-to-string('a'))]
+P81:  'b' -> words-range-21[string-append(0, char-to-string('b'))]
+P82:  'c' -> words-range-21[string-append(0, char-to-string('c'))]
+P83:  'd' -> words-range-21[string-append(0, char-to-string('d'))]
+P84:  'e' -> words-range-21[string-append(0, char-to-string('e'))]
+P85:  'f' -> words-range-21[string-append(0, char-to-string('f'))]
+P86:  'g' -> words-range-21[string-append(0, char-to-string('g'))]
+P87:  'h' -> words-range-21[string-append(0, char-to-string('h'))]
+P88:  'i' -> words-range-21[string-append(0, char-to-string('i'))]
+P89:  'j' -> words-range-21[string-append(0, char-to-string('j'))]
 P9:  #aws #ows-star-4 -> ows-star-4[]
-P90:  '8' -> digit-range-10[string-append(0, char-to-string('8'))]
-P91:  '9' -> digit-range-10[string-append(0, char-to-string('9'))]
-P92:  digit-range-10[0] -> digit[string-append(0, x0)]
-P93:  digit[0] digit[1] -> twodigit[string-append(1, x0, x1)]
-P94:  twodigit[0] -> month[string-append(0, x0)]
-P95:  twodigit[0] -> day[string-append(0, x0)]
-P96:  digit[0] digit[1] digit[2] digit[3] -> year[string-append(3, x0, x1, x2, x3)]
-P97:  #',' -> datesep-bar-11[]
-P98:  #' ' -> datesep-bar-11[]
-P99:  #'.' -> datesep-bar-12[]
+P90:  'k' -> words-range-21[string-append(0, char-to-string('k'))]
+P91:  'l' -> words-range-21[string-append(0, char-to-string('l'))]
+P92:  'm' -> words-range-21[string-append(0, char-to-string('m'))]
+P93:  'n' -> words-range-21[string-append(0, char-to-string('n'))]
+P94:  'o' -> words-range-21[string-append(0, char-to-string('o'))]
+P95:  'p' -> words-range-21[string-append(0, char-to-string('p'))]
+P96:  'q' -> words-range-21[string-append(0, char-to-string('q'))]
+P97:  'r' -> words-range-21[string-append(0, char-to-string('r'))]
+P98:  's' -> words-range-21[string-append(0, char-to-string('s'))]
+P99:  't' -> words-range-21[string-append(0, char-to-string('t'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows -> strt[Strt(x0, x1, x2)]
+Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows description[3] #ows -> strt[Strt(x0, x1, x2, x3)]
 TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
@@ -471,139 +565,170 @@ TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
 AM: AM . am . x1 -> whichm(AM) . x1
 AllDayRange: AllDayRange . allday . x1 -> timerange(AllDayRange) . x1
 AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> date(AmericanDate(x0, x1, x2)) . x3
+Description: Description . words(x0) . x1 -> description(Description(x0)) . x1
 EventName: EventName . words(x0) . x1 -> evtname(EventName(x0)) . x1
 GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> date(GlobalDate(x0, x1, x2)) . x3
 MilitaryTime: MilitaryTime . hour(x0) . ':' . minute(x1) . x2 -> time(MilitaryTime(x0, x1)) . x2
+NoDescription: NoDescription . x1 -> description(NoDescription) . x1
 P0: P0 . '\t' . x1 -> aws-bar-1 . x1
 P1: P1 . ' ' . x1 -> aws-bar-1 . x1
 P10: P10 . ows-star-4 . x1 -> ows . x1
-P100: P100 . datesep-bar-11 . x1 -> datesep-bar-12 . x1
-P101: P101 . '/' . x1 -> datesep-bar-13 . x1
-P102: P102 . datesep-bar-12 . x1 -> datesep-bar-13 . x1
-P103: P103 . datesep-bar-13 . x1 -> datesep . x1
-P104: P104 . twodigit(x0) . x1 -> hour(string-append(0, x0)) . x1
-P105: P105 . twodigit(x0) . x1 -> minute(string-append(0, x0)) . x1
-P106: P106 . 'A' . 'M' . x1 -> am-bar-14 . x1
-P107: P107 . 'a' . 'm' . x1 -> am-bar-14 . x1
-P108: P108 . am-bar-14 . x1 -> am . x1
-P109: P109 . 'P' . 'M' . x1 -> pm-bar-15 . x1
-P11: P11 . '0' . x1 -> words-range-5(string-append(0, char-to-string('0'))) . x1
-P110: P110 . 'p' . 'm' . x1 -> pm-bar-15 . x1
-P111: P111 . pm-bar-15 . x1 -> pm . x1
-P112: P112 . 't' . 'o' . x1 -> timesep-bar-16 . x1
-P113: P113 . '-' . x1 -> timesep-bar-16 . x1
-P114: P114 . timesep-bar-16 . x1 -> timesep . x1
-P115: P115 . 'A' . 'l' . 'l' . x1 -> alldayA-bar-17 . x1
-P116: P116 . 'A' . 'L' . 'L' . x1 -> alldayA-bar-17 . x1
-P117: P117 . 'a' . 'l' . 'l' . x1 -> alldayA-bar-18 . x1
-P118: P118 . alldayA-bar-17 . x1 -> alldayA-bar-18 . x1
-P119: P119 . alldayA-bar-18 . x1 -> alldayA . x1
-P12: P12 . '1' . x1 -> words-range-5(string-append(0, char-to-string('1'))) . x1
-P120: P120 . 'D' . 'a' . 'y' . x1 -> alldayD-bar-19 . x1
-P121: P121 . 'D' . 'A' . 'Y' . x1 -> alldayD-bar-19 . x1
-P122: P122 . 'd' . 'a' . 'y' . x1 -> alldayD-bar-20 . x1
-P123: P123 . alldayD-bar-19 . x1 -> alldayD-bar-20 . x1
-P124: P124 . alldayD-bar-20 . x1 -> alldayD . x1
-P125: P125 . alldayA . ows . alldayD . x1 -> allday . x1
-P13: P13 . '2' . x1 -> words-range-5(string-append(0, char-to-string('2'))) . x1
-P14: P14 . '3' . x1 -> words-range-5(string-append(0, char-to-string('3'))) . x1
-P15: P15 . '4' . x1 -> words-range-5(string-append(0, char-to-string('4'))) . x1
-P16: P16 . '5' . x1 -> words-range-5(string-append(0, char-to-string('5'))) . x1
-P17: P17 . '6' . x1 -> words-range-5(string-append(0, char-to-string('6'))) . x1
-P18: P18 . '7' . x1 -> words-range-5(string-append(0, char-to-string('7'))) . x1
-P19: P19 . '8' . x1 -> words-range-5(string-append(0, char-to-string('8'))) . x1
+P100: P100 . 'u' . x1 -> words-range-21(string-append(0, char-to-string('u'))) . x1
+P101: P101 . 'v' . x1 -> words-range-21(string-append(0, char-to-string('v'))) . x1
+P102: P102 . 'w' . x1 -> words-range-21(string-append(0, char-to-string('w'))) . x1
+P103: P103 . 'x' . x1 -> words-range-21(string-append(0, char-to-string('x'))) . x1
+P104: P104 . 'y' . x1 -> words-range-21(string-append(0, char-to-string('y'))) . x1
+P105: P105 . 'z' . x1 -> words-range-21(string-append(0, char-to-string('z'))) . x1
+P106: P106 . words-range-21(x0) . x1 -> words-bar-22(string-append(0, x0)) . x1
+P107: P107 . symbol(x0) . x1 -> words-bar-22(string-append(0, x0)) . x1
+P108: P108 . words-bar-22(x0) . x1 -> words-plus-23(string-append(0, x0)) . x1
+P109: P109 . words-bar-22(x0) . words-plus-23(x1) . x2 -> words-plus-23(string-append(1, x0, x1)) . x2
+P11: P11 . '"' . x1 -> symbol-bar-5(string-append(0, char-to-string('"'))) . x1
+P110: P110 . words-plus-23(x0) . x1 -> words(string-append(0, x0)) . x1
+P111: P111 . '0' . x1 -> digit-range-24(string-append(0, char-to-string('0'))) . x1
+P112: P112 . '1' . x1 -> digit-range-24(string-append(0, char-to-string('1'))) . x1
+P113: P113 . '2' . x1 -> digit-range-24(string-append(0, char-to-string('2'))) . x1
+P114: P114 . '3' . x1 -> digit-range-24(string-append(0, char-to-string('3'))) . x1
+P115: P115 . '4' . x1 -> digit-range-24(string-append(0, char-to-string('4'))) . x1
+P116: P116 . '5' . x1 -> digit-range-24(string-append(0, char-to-string('5'))) . x1
+P117: P117 . '6' . x1 -> digit-range-24(string-append(0, char-to-string('6'))) . x1
+P118: P118 . '7' . x1 -> digit-range-24(string-append(0, char-to-string('7'))) . x1
+P119: P119 . '8' . x1 -> digit-range-24(string-append(0, char-to-string('8'))) . x1
+P12: P12 . '\'' . x1 -> symbol-bar-5(string-append(0, char-to-string('\''))) . x1
+P120: P120 . '9' . x1 -> digit-range-24(string-append(0, char-to-string('9'))) . x1
+P121: P121 . digit-range-24(x0) . x1 -> digit(string-append(0, x0)) . x1
+P122: P122 . digit(x0) . digit(x1) . x2 -> twodigit(string-append(1, x0, x1)) . x2
+P123: P123 . twodigit(x0) . x1 -> month(string-append(0, x0)) . x1
+P124: P124 . twodigit(x0) . x1 -> day(string-append(0, x0)) . x1
+P125: P125 . digit(x0) . digit(x1) . digit(x2) . digit(x3) . x4 -> year(string-append(3, x0, x1, x2, x3)) . x4
+P126: P126 . ',' . x1 -> datesep-bar-25 . x1
+P127: P127 . ' ' . x1 -> datesep-bar-25 . x1
+P128: P128 . '.' . x1 -> datesep-bar-26 . x1
+P129: P129 . datesep-bar-25 . x1 -> datesep-bar-26 . x1
+P13: P13 . '%' . x1 -> symbol-bar-6(string-append(0, char-to-string('%'))) . x1
+P130: P130 . '/' . x1 -> datesep-bar-27 . x1
+P131: P131 . datesep-bar-26 . x1 -> datesep-bar-27 . x1
+P132: P132 . datesep-bar-27 . x1 -> datesep . x1
+P133: P133 . twodigit(x0) . x1 -> hour(string-append(0, x0)) . x1
+P134: P134 . twodigit(x0) . x1 -> minute(string-append(0, x0)) . x1
+P135: P135 . 'A' . 'M' . x1 -> am-bar-28 . x1
+P136: P136 . 'a' . 'm' . x1 -> am-bar-28 . x1
+P137: P137 . am-bar-28 . x1 -> am . x1
+P138: P138 . 'P' . 'M' . x1 -> pm-bar-29 . x1
+P139: P139 . 'p' . 'm' . x1 -> pm-bar-29 . x1
+P14: P14 . symbol-bar-5(x0) . x1 -> symbol-bar-6(string-append(0, x0)) . x1
+P140: P140 . pm-bar-29 . x1 -> pm . x1
+P141: P141 . 't' . 'o' . x1 -> timesep-bar-30 . x1
+P142: P142 . '-' . x1 -> timesep-bar-30 . x1
+P143: P143 . timesep-bar-30 . x1 -> timesep . x1
+P144: P144 . 'A' . 'l' . 'l' . x1 -> alldayA-bar-31 . x1
+P145: P145 . 'A' . 'L' . 'L' . x1 -> alldayA-bar-31 . x1
+P146: P146 . 'a' . 'l' . 'l' . x1 -> alldayA-bar-32 . x1
+P147: P147 . alldayA-bar-31 . x1 -> alldayA-bar-32 . x1
+P148: P148 . alldayA-bar-32 . x1 -> alldayA . x1
+P149: P149 . 'D' . 'a' . 'y' . x1 -> alldayD-bar-33 . x1
+P15: P15 . '_' . x1 -> symbol-bar-7(string-append(0, char-to-string('_'))) . x1
+P150: P150 . 'D' . 'A' . 'Y' . x1 -> alldayD-bar-33 . x1
+P151: P151 . 'd' . 'a' . 'y' . x1 -> alldayD-bar-34 . x1
+P152: P152 . alldayD-bar-33 . x1 -> alldayD-bar-34 . x1
+P153: P153 . alldayD-bar-34 . x1 -> alldayD . x1
+P154: P154 . alldayA . ows . alldayD . x1 -> allday . x1
+P16: P16 . symbol-bar-6(x0) . x1 -> symbol-bar-7(string-append(0, x0)) . x1
+P17: P17 . ';' . x1 -> symbol-bar-8(string-append(0, char-to-string(';'))) . x1
+P18: P18 . symbol-bar-7(x0) . x1 -> symbol-bar-8(string-append(0, x0)) . x1
+P19: P19 . '@' . x1 -> symbol-bar-9(string-append(0, char-to-string('@'))) . x1
 P2: P2 . '\n' . x1 -> aws-bar-2 . x1
-P20: P20 . '9' . x1 -> words-range-5(string-append(0, char-to-string('9'))) . x1
-P21: P21 . 'A' . x1 -> words-range-5(string-append(0, char-to-string('A'))) . x1
-P22: P22 . 'B' . x1 -> words-range-5(string-append(0, char-to-string('B'))) . x1
-P23: P23 . 'C' . x1 -> words-range-5(string-append(0, char-to-string('C'))) . x1
-P24: P24 . 'D' . x1 -> words-range-5(string-append(0, char-to-string('D'))) . x1
-P25: P25 . 'E' . x1 -> words-range-5(string-append(0, char-to-string('E'))) . x1
-P26: P26 . 'F' . x1 -> words-range-5(string-append(0, char-to-string('F'))) . x1
-P27: P27 . 'G' . x1 -> words-range-5(string-append(0, char-to-string('G'))) . x1
-P28: P28 . 'H' . x1 -> words-range-5(string-append(0, char-to-string('H'))) . x1
-P29: P29 . 'I' . x1 -> words-range-5(string-append(0, char-to-string('I'))) . x1
+P20: P20 . symbol-bar-8(x0) . x1 -> symbol-bar-9(string-append(0, x0)) . x1
+P21: P21 . '#' . x1 -> symbol-bar-10(string-append(0, char-to-string('#'))) . x1
+P22: P22 . symbol-bar-9(x0) . x1 -> symbol-bar-10(string-append(0, x0)) . x1
+P23: P23 . ')' . x1 -> symbol-bar-11(string-append(0, char-to-string(')'))) . x1
+P24: P24 . symbol-bar-10(x0) . x1 -> symbol-bar-11(string-append(0, x0)) . x1
+P25: P25 . '(' . x1 -> symbol-bar-12(string-append(0, char-to-string('('))) . x1
+P26: P26 . symbol-bar-11(x0) . x1 -> symbol-bar-12(string-append(0, x0)) . x1
+P27: P27 . '-' . x1 -> symbol-bar-13(string-append(0, char-to-string('-'))) . x1
+P28: P28 . symbol-bar-12(x0) . x1 -> symbol-bar-13(string-append(0, x0)) . x1
+P29: P29 . '+' . x1 -> symbol-bar-14(string-append(0, char-to-string('+'))) . x1
 P3: P3 . aws-bar-1 . x1 -> aws-bar-2 . x1
-P30: P30 . 'J' . x1 -> words-range-5(string-append(0, char-to-string('J'))) . x1
-P31: P31 . 'K' . x1 -> words-range-5(string-append(0, char-to-string('K'))) . x1
-P32: P32 . 'L' . x1 -> words-range-5(string-append(0, char-to-string('L'))) . x1
-P33: P33 . 'M' . x1 -> words-range-5(string-append(0, char-to-string('M'))) . x1
-P34: P34 . 'N' . x1 -> words-range-5(string-append(0, char-to-string('N'))) . x1
-P35: P35 . 'O' . x1 -> words-range-5(string-append(0, char-to-string('O'))) . x1
-P36: P36 . 'P' . x1 -> words-range-5(string-append(0, char-to-string('P'))) . x1
-P37: P37 . 'Q' . x1 -> words-range-5(string-append(0, char-to-string('Q'))) . x1
-P38: P38 . 'R' . x1 -> words-range-5(string-append(0, char-to-string('R'))) . x1
-P39: P39 . 'S' . x1 -> words-range-5(string-append(0, char-to-string('S'))) . x1
+P30: P30 . symbol-bar-13(x0) . x1 -> symbol-bar-14(string-append(0, x0)) . x1
+P31: P31 . '$' . x1 -> symbol-bar-15(string-append(0, char-to-string('$'))) . x1
+P32: P32 . symbol-bar-14(x0) . x1 -> symbol-bar-15(string-append(0, x0)) . x1
+P33: P33 . ',' . x1 -> symbol-bar-16(string-append(0, char-to-string(','))) . x1
+P34: P34 . symbol-bar-15(x0) . x1 -> symbol-bar-16(string-append(0, x0)) . x1
+P35: P35 . '.' . x1 -> symbol-bar-17(string-append(0, char-to-string('.'))) . x1
+P36: P36 . symbol-bar-16(x0) . x1 -> symbol-bar-17(string-append(0, x0)) . x1
+P37: P37 . '?' . x1 -> symbol-bar-18(string-append(0, char-to-string('?'))) . x1
+P38: P38 . symbol-bar-17(x0) . x1 -> symbol-bar-18(string-append(0, x0)) . x1
+P39: P39 . '!' . x1 -> symbol-bar-19(string-append(0, char-to-string('!'))) . x1
 P4: P4 . aws-bar-2 . x1 -> aws . x1
-P40: P40 . 'T' . x1 -> words-range-5(string-append(0, char-to-string('T'))) . x1
-P41: P41 . 'U' . x1 -> words-range-5(string-append(0, char-to-string('U'))) . x1
-P42: P42 . 'V' . x1 -> words-range-5(string-append(0, char-to-string('V'))) . x1
-P43: P43 . 'W' . x1 -> words-range-5(string-append(0, char-to-string('W'))) . x1
-P44: P44 . 'X' . x1 -> words-range-5(string-append(0, char-to-string('X'))) . x1
-P45: P45 . 'Y' . x1 -> words-range-5(string-append(0, char-to-string('Y'))) . x1
-P46: P46 . 'Z' . x1 -> words-range-5(string-append(0, char-to-string('Z'))) . x1
-P47: P47 . 'a' . x1 -> words-range-5(string-append(0, char-to-string('a'))) . x1
-P48: P48 . 'b' . x1 -> words-range-5(string-append(0, char-to-string('b'))) . x1
-P49: P49 . 'c' . x1 -> words-range-5(string-append(0, char-to-string('c'))) . x1
+P40: P40 . symbol-bar-18(x0) . x1 -> symbol-bar-19(string-append(0, x0)) . x1
+P41: P41 . ' ' . x1 -> symbol-bar-20(string-append(0, char-to-string(' '))) . x1
+P42: P42 . symbol-bar-19(x0) . x1 -> symbol-bar-20(string-append(0, x0)) . x1
+P43: P43 . symbol-bar-20(x0) . x1 -> symbol(string-append(0, x0)) . x1
+P44: P44 . '0' . x1 -> words-range-21(string-append(0, char-to-string('0'))) . x1
+P45: P45 . '1' . x1 -> words-range-21(string-append(0, char-to-string('1'))) . x1
+P46: P46 . '2' . x1 -> words-range-21(string-append(0, char-to-string('2'))) . x1
+P47: P47 . '3' . x1 -> words-range-21(string-append(0, char-to-string('3'))) . x1
+P48: P48 . '4' . x1 -> words-range-21(string-append(0, char-to-string('4'))) . x1
+P49: P49 . '5' . x1 -> words-range-21(string-append(0, char-to-string('5'))) . x1
 P5: P5 . aws . x1 -> ws-plus-3 . x1
-P50: P50 . 'd' . x1 -> words-range-5(string-append(0, char-to-string('d'))) . x1
-P51: P51 . 'e' . x1 -> words-range-5(string-append(0, char-to-string('e'))) . x1
-P52: P52 . 'f' . x1 -> words-range-5(string-append(0, char-to-string('f'))) . x1
-P53: P53 . 'g' . x1 -> words-range-5(string-append(0, char-to-string('g'))) . x1
-P54: P54 . 'h' . x1 -> words-range-5(string-append(0, char-to-string('h'))) . x1
-P55: P55 . 'i' . x1 -> words-range-5(string-append(0, char-to-string('i'))) . x1
-P56: P56 . 'j' . x1 -> words-range-5(string-append(0, char-to-string('j'))) . x1
-P57: P57 . 'k' . x1 -> words-range-5(string-append(0, char-to-string('k'))) . x1
-P58: P58 . 'l' . x1 -> words-range-5(string-append(0, char-to-string('l'))) . x1
-P59: P59 . 'm' . x1 -> words-range-5(string-append(0, char-to-string('m'))) . x1
+P50: P50 . '6' . x1 -> words-range-21(string-append(0, char-to-string('6'))) . x1
+P51: P51 . '7' . x1 -> words-range-21(string-append(0, char-to-string('7'))) . x1
+P52: P52 . '8' . x1 -> words-range-21(string-append(0, char-to-string('8'))) . x1
+P53: P53 . '9' . x1 -> words-range-21(string-append(0, char-to-string('9'))) . x1
+P54: P54 . 'A' . x1 -> words-range-21(string-append(0, char-to-string('A'))) . x1
+P55: P55 . 'B' . x1 -> words-range-21(string-append(0, char-to-string('B'))) . x1
+P56: P56 . 'C' . x1 -> words-range-21(string-append(0, char-to-string('C'))) . x1
+P57: P57 . 'D' . x1 -> words-range-21(string-append(0, char-to-string('D'))) . x1
+P58: P58 . 'E' . x1 -> words-range-21(string-append(0, char-to-string('E'))) . x1
+P59: P59 . 'F' . x1 -> words-range-21(string-append(0, char-to-string('F'))) . x1
 P6: P6 . aws . ws-plus-3 . x1 -> ws-plus-3 . x1
-P60: P60 . 'n' . x1 -> words-range-5(string-append(0, char-to-string('n'))) . x1
-P61: P61 . 'o' . x1 -> words-range-5(string-append(0, char-to-string('o'))) . x1
-P62: P62 . 'p' . x1 -> words-range-5(string-append(0, char-to-string('p'))) . x1
-P63: P63 . 'q' . x1 -> words-range-5(string-append(0, char-to-string('q'))) . x1
-P64: P64 . 'r' . x1 -> words-range-5(string-append(0, char-to-string('r'))) . x1
-P65: P65 . 's' . x1 -> words-range-5(string-append(0, char-to-string('s'))) . x1
-P66: P66 . 't' . x1 -> words-range-5(string-append(0, char-to-string('t'))) . x1
-P67: P67 . 'u' . x1 -> words-range-5(string-append(0, char-to-string('u'))) . x1
-P68: P68 . 'v' . x1 -> words-range-5(string-append(0, char-to-string('v'))) . x1
-P69: P69 . 'w' . x1 -> words-range-5(string-append(0, char-to-string('w'))) . x1
+P60: P60 . 'G' . x1 -> words-range-21(string-append(0, char-to-string('G'))) . x1
+P61: P61 . 'H' . x1 -> words-range-21(string-append(0, char-to-string('H'))) . x1
+P62: P62 . 'I' . x1 -> words-range-21(string-append(0, char-to-string('I'))) . x1
+P63: P63 . 'J' . x1 -> words-range-21(string-append(0, char-to-string('J'))) . x1
+P64: P64 . 'K' . x1 -> words-range-21(string-append(0, char-to-string('K'))) . x1
+P65: P65 . 'L' . x1 -> words-range-21(string-append(0, char-to-string('L'))) . x1
+P66: P66 . 'M' . x1 -> words-range-21(string-append(0, char-to-string('M'))) . x1
+P67: P67 . 'N' . x1 -> words-range-21(string-append(0, char-to-string('N'))) . x1
+P68: P68 . 'O' . x1 -> words-range-21(string-append(0, char-to-string('O'))) . x1
+P69: P69 . 'P' . x1 -> words-range-21(string-append(0, char-to-string('P'))) . x1
 P7: P7 . ws-plus-3 . x1 -> ws . x1
-P70: P70 . 'x' . x1 -> words-range-5(string-append(0, char-to-string('x'))) . x1
-P71: P71 . 'y' . x1 -> words-range-5(string-append(0, char-to-string('y'))) . x1
-P72: P72 . 'z' . x1 -> words-range-5(string-append(0, char-to-string('z'))) . x1
-P73: P73 . '!' . x1 -> words-bar-6(string-append(0, char-to-string('!'))) . x1
-P74: P74 . '?' . x1 -> words-bar-6(string-append(0, char-to-string('?'))) . x1
-P75: P75 . ' ' . x1 -> words-bar-7(string-append(0, char-to-string(' '))) . x1
-P76: P76 . words-bar-6(x0) . x1 -> words-bar-7(string-append(0, x0)) . x1
-P77: P77 . words-range-5(x0) . x1 -> words-bar-8(string-append(0, x0)) . x1
-P78: P78 . words-bar-7(x0) . x1 -> words-bar-8(string-append(0, x0)) . x1
-P79: P79 . words-bar-8(x0) . x1 -> words-plus-9(string-append(0, x0)) . x1
+P70: P70 . 'Q' . x1 -> words-range-21(string-append(0, char-to-string('Q'))) . x1
+P71: P71 . 'R' . x1 -> words-range-21(string-append(0, char-to-string('R'))) . x1
+P72: P72 . 'S' . x1 -> words-range-21(string-append(0, char-to-string('S'))) . x1
+P73: P73 . 'T' . x1 -> words-range-21(string-append(0, char-to-string('T'))) . x1
+P74: P74 . 'U' . x1 -> words-range-21(string-append(0, char-to-string('U'))) . x1
+P75: P75 . 'V' . x1 -> words-range-21(string-append(0, char-to-string('V'))) . x1
+P76: P76 . 'W' . x1 -> words-range-21(string-append(0, char-to-string('W'))) . x1
+P77: P77 . 'X' . x1 -> words-range-21(string-append(0, char-to-string('X'))) . x1
+P78: P78 . 'Y' . x1 -> words-range-21(string-append(0, char-to-string('Y'))) . x1
+P79: P79 . 'Z' . x1 -> words-range-21(string-append(0, char-to-string('Z'))) . x1
 P8: P8 . x1 -> ows-star-4 . x1
-P80: P80 . words-bar-8(x0) . words-plus-9(x1) . x2 -> words-plus-9(string-append(1, x0, x1)) . x2
-P81: P81 . words-plus-9(x0) . x1 -> words(string-append(0, x0)) . x1
-P82: P82 . '0' . x1 -> digit-range-10(string-append(0, char-to-string('0'))) . x1
-P83: P83 . '1' . x1 -> digit-range-10(string-append(0, char-to-string('1'))) . x1
-P84: P84 . '2' . x1 -> digit-range-10(string-append(0, char-to-string('2'))) . x1
-P85: P85 . '3' . x1 -> digit-range-10(string-append(0, char-to-string('3'))) . x1
-P86: P86 . '4' . x1 -> digit-range-10(string-append(0, char-to-string('4'))) . x1
-P87: P87 . '5' . x1 -> digit-range-10(string-append(0, char-to-string('5'))) . x1
-P88: P88 . '6' . x1 -> digit-range-10(string-append(0, char-to-string('6'))) . x1
-P89: P89 . '7' . x1 -> digit-range-10(string-append(0, char-to-string('7'))) . x1
+P80: P80 . 'a' . x1 -> words-range-21(string-append(0, char-to-string('a'))) . x1
+P81: P81 . 'b' . x1 -> words-range-21(string-append(0, char-to-string('b'))) . x1
+P82: P82 . 'c' . x1 -> words-range-21(string-append(0, char-to-string('c'))) . x1
+P83: P83 . 'd' . x1 -> words-range-21(string-append(0, char-to-string('d'))) . x1
+P84: P84 . 'e' . x1 -> words-range-21(string-append(0, char-to-string('e'))) . x1
+P85: P85 . 'f' . x1 -> words-range-21(string-append(0, char-to-string('f'))) . x1
+P86: P86 . 'g' . x1 -> words-range-21(string-append(0, char-to-string('g'))) . x1
+P87: P87 . 'h' . x1 -> words-range-21(string-append(0, char-to-string('h'))) . x1
+P88: P88 . 'i' . x1 -> words-range-21(string-append(0, char-to-string('i'))) . x1
+P89: P89 . 'j' . x1 -> words-range-21(string-append(0, char-to-string('j'))) . x1
 P9: P9 . aws . ows-star-4 . x1 -> ows-star-4 . x1
-P90: P90 . '8' . x1 -> digit-range-10(string-append(0, char-to-string('8'))) . x1
-P91: P91 . '9' . x1 -> digit-range-10(string-append(0, char-to-string('9'))) . x1
-P92: P92 . digit-range-10(x0) . x1 -> digit(string-append(0, x0)) . x1
-P93: P93 . digit(x0) . digit(x1) . x2 -> twodigit(string-append(1, x0, x1)) . x2
-P94: P94 . twodigit(x0) . x1 -> month(string-append(0, x0)) . x1
-P95: P95 . twodigit(x0) . x1 -> day(string-append(0, x0)) . x1
-P96: P96 . digit(x0) . digit(x1) . digit(x2) . digit(x3) . x4 -> year(string-append(3, x0, x1, x2, x3)) . x4
-P97: P97 . ',' . x1 -> datesep-bar-11 . x1
-P98: P98 . ' ' . x1 -> datesep-bar-11 . x1
-P99: P99 . '.' . x1 -> datesep-bar-12 . x1
+P90: P90 . 'k' . x1 -> words-range-21(string-append(0, char-to-string('k'))) . x1
+P91: P91 . 'l' . x1 -> words-range-21(string-append(0, char-to-string('l'))) . x1
+P92: P92 . 'm' . x1 -> words-range-21(string-append(0, char-to-string('m'))) . x1
+P93: P93 . 'n' . x1 -> words-range-21(string-append(0, char-to-string('n'))) . x1
+P94: P94 . 'o' . x1 -> words-range-21(string-append(0, char-to-string('o'))) . x1
+P95: P95 . 'p' . x1 -> words-range-21(string-append(0, char-to-string('p'))) . x1
+P96: P96 . 'q' . x1 -> words-range-21(string-append(0, char-to-string('q'))) . x1
+P97: P97 . 'r' . x1 -> words-range-21(string-append(0, char-to-string('r'))) . x1
+P98: P98 . 's' . x1 -> words-range-21(string-append(0, char-to-string('s'))) . x1
+P99: P99 . 't' . x1 -> words-range-21(string-append(0, char-to-string('t'))) . x1
 PM: PM . pm . x1 -> whichm(PM) . x1
 Posinfo: Posinfo . x1 -> posinfo(Posinfo) . x1
 RegTime: RegTime . hour(x0) . ':' . minute(x1) . ows . whichm(x2) . x3 -> time(RegTime(x0, x1, x2)) . x3
-Strt: Strt . ows . evtname(x0) . '\n' . date(x1) . ws . timerange(x2) . ows . x3 -> strt(Strt(x0, x1, x2)) . x3
+Strt: Strt . ows . evtname(x0) . '\n' . date(x1) . ws . timerange(x2) . ows . description(x3) . ows . x4 -> strt(Strt(x0, x1, x2, x3)) . x4
 TimeRange: TimeRange . time(x0) . ows . timesep . ows . time(x1) . x2 -> timerange(TimeRange(x0, x1)) . x2
 )
 (No reorganizing critical pairs found.)

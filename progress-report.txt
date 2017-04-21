@@ -1,0 +1,3 @@
+Thus far, we have created a grammar file (aggycal.gr) and used gratr to create a parser for this grammar. It is relatively “bare bones”, only providing for an event name, date, time range, and description. However, it does work well and yields a good parse tree. Now we are beginning to create our first .ics file from agda.
+
+We would like to present if possible. Either day would work for us.

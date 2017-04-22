@@ -10,7 +10,7 @@ open import parse-tree
 posinfo = string
 day = string
 digit = string
-digit-range-24 = string
+digit-range-28 = string
 hour = string
 minute = string
 month = string
@@ -26,6 +26,10 @@ symbol-bar-17 = string
 symbol-bar-18 = string
 symbol-bar-19 = string
 symbol-bar-20 = string
+symbol-bar-21 = string
+symbol-bar-22 = string
+symbol-bar-23 = string
+symbol-bar-24 = string
 symbol-bar-5 = string
 symbol-bar-6 = string
 symbol-bar-7 = string
@@ -33,9 +37,9 @@ symbol-bar-8 = string
 symbol-bar-9 = string
 twodigit = string
 words = string
-words-bar-22 = string
-words-plus-23 = string
-words-range-21 = string
+words-bar-26 = string
+words-plus-27 = string
+words-range-25 = string
 year = string
 
 mutual
@@ -79,7 +83,7 @@ data ParseTreeT : Set where
   parsed-posinfo : posinfo → ParseTreeT
   parsed-day : day → ParseTreeT
   parsed-digit : digit → ParseTreeT
-  parsed-digit-range-24 : digit-range-24 → ParseTreeT
+  parsed-digit-range-28 : digit-range-28 → ParseTreeT
   parsed-hour : hour → ParseTreeT
   parsed-minute : minute → ParseTreeT
   parsed-month : month → ParseTreeT
@@ -95,6 +99,10 @@ data ParseTreeT : Set where
   parsed-symbol-bar-18 : symbol-bar-18 → ParseTreeT
   parsed-symbol-bar-19 : symbol-bar-19 → ParseTreeT
   parsed-symbol-bar-20 : symbol-bar-20 → ParseTreeT
+  parsed-symbol-bar-21 : symbol-bar-21 → ParseTreeT
+  parsed-symbol-bar-22 : symbol-bar-22 → ParseTreeT
+  parsed-symbol-bar-23 : symbol-bar-23 → ParseTreeT
+  parsed-symbol-bar-24 : symbol-bar-24 → ParseTreeT
   parsed-symbol-bar-5 : symbol-bar-5 → ParseTreeT
   parsed-symbol-bar-6 : symbol-bar-6 → ParseTreeT
   parsed-symbol-bar-7 : symbol-bar-7 → ParseTreeT
@@ -102,32 +110,32 @@ data ParseTreeT : Set where
   parsed-symbol-bar-9 : symbol-bar-9 → ParseTreeT
   parsed-twodigit : twodigit → ParseTreeT
   parsed-words : words → ParseTreeT
-  parsed-words-bar-22 : words-bar-22 → ParseTreeT
-  parsed-words-plus-23 : words-plus-23 → ParseTreeT
-  parsed-words-range-21 : words-range-21 → ParseTreeT
+  parsed-words-bar-26 : words-bar-26 → ParseTreeT
+  parsed-words-plus-27 : words-plus-27 → ParseTreeT
+  parsed-words-range-25 : words-range-25 → ParseTreeT
   parsed-year : year → ParseTreeT
   parsed-allday : ParseTreeT
   parsed-alldayA : ParseTreeT
-  parsed-alldayA-bar-31 : ParseTreeT
-  parsed-alldayA-bar-32 : ParseTreeT
+  parsed-alldayA-bar-35 : ParseTreeT
+  parsed-alldayA-bar-36 : ParseTreeT
   parsed-alldayD : ParseTreeT
-  parsed-alldayD-bar-33 : ParseTreeT
-  parsed-alldayD-bar-34 : ParseTreeT
+  parsed-alldayD-bar-37 : ParseTreeT
+  parsed-alldayD-bar-38 : ParseTreeT
   parsed-am : ParseTreeT
-  parsed-am-bar-28 : ParseTreeT
+  parsed-am-bar-32 : ParseTreeT
   parsed-aws : ParseTreeT
   parsed-aws-bar-1 : ParseTreeT
   parsed-aws-bar-2 : ParseTreeT
   parsed-datesep : ParseTreeT
-  parsed-datesep-bar-25 : ParseTreeT
-  parsed-datesep-bar-26 : ParseTreeT
-  parsed-datesep-bar-27 : ParseTreeT
+  parsed-datesep-bar-29 : ParseTreeT
+  parsed-datesep-bar-30 : ParseTreeT
+  parsed-datesep-bar-31 : ParseTreeT
   parsed-ows : ParseTreeT
   parsed-ows-star-4 : ParseTreeT
   parsed-pm : ParseTreeT
-  parsed-pm-bar-29 : ParseTreeT
+  parsed-pm-bar-33 : ParseTreeT
   parsed-timesep : ParseTreeT
-  parsed-timesep-bar-30 : ParseTreeT
+  parsed-timesep-bar-34 : ParseTreeT
   parsed-ws : ParseTreeT
   parsed-ws-plus-3 : ParseTreeT
 
@@ -141,8 +149,8 @@ dayToString : day → string
 dayToString x = "(day " ^ x ^ ")"
 digitToString : digit → string
 digitToString x = "(digit " ^ x ^ ")"
-digit-range-24ToString : digit-range-24 → string
-digit-range-24ToString x = "(digit-range-24 " ^ x ^ ")"
+digit-range-28ToString : digit-range-28 → string
+digit-range-28ToString x = "(digit-range-28 " ^ x ^ ")"
 hourToString : hour → string
 hourToString x = "(hour " ^ x ^ ")"
 minuteToString : minute → string
@@ -173,6 +181,14 @@ symbol-bar-19ToString : symbol-bar-19 → string
 symbol-bar-19ToString x = "(symbol-bar-19 " ^ x ^ ")"
 symbol-bar-20ToString : symbol-bar-20 → string
 symbol-bar-20ToString x = "(symbol-bar-20 " ^ x ^ ")"
+symbol-bar-21ToString : symbol-bar-21 → string
+symbol-bar-21ToString x = "(symbol-bar-21 " ^ x ^ ")"
+symbol-bar-22ToString : symbol-bar-22 → string
+symbol-bar-22ToString x = "(symbol-bar-22 " ^ x ^ ")"
+symbol-bar-23ToString : symbol-bar-23 → string
+symbol-bar-23ToString x = "(symbol-bar-23 " ^ x ^ ")"
+symbol-bar-24ToString : symbol-bar-24 → string
+symbol-bar-24ToString x = "(symbol-bar-24 " ^ x ^ ")"
 symbol-bar-5ToString : symbol-bar-5 → string
 symbol-bar-5ToString x = "(symbol-bar-5 " ^ x ^ ")"
 symbol-bar-6ToString : symbol-bar-6 → string
@@ -187,12 +203,12 @@ twodigitToString : twodigit → string
 twodigitToString x = "(twodigit " ^ x ^ ")"
 wordsToString : words → string
 wordsToString x = "(words " ^ x ^ ")"
-words-bar-22ToString : words-bar-22 → string
-words-bar-22ToString x = "(words-bar-22 " ^ x ^ ")"
-words-plus-23ToString : words-plus-23 → string
-words-plus-23ToString x = "(words-plus-23 " ^ x ^ ")"
-words-range-21ToString : words-range-21 → string
-words-range-21ToString x = "(words-range-21 " ^ x ^ ")"
+words-bar-26ToString : words-bar-26 → string
+words-bar-26ToString x = "(words-bar-26 " ^ x ^ ")"
+words-plus-27ToString : words-plus-27 → string
+words-plus-27ToString x = "(words-plus-27 " ^ x ^ ")"
+words-range-25ToString : words-range-25 → string
+words-range-25ToString x = "(words-range-25 " ^ x ^ ")"
 yearToString : year → string
 yearToString x = "(year " ^ x ^ ")"
 
@@ -234,7 +250,7 @@ ParseTreeToString (parsed-whichm t) = whichmToString t
 ParseTreeToString (parsed-posinfo t) = posinfoToString t
 ParseTreeToString (parsed-day t) = dayToString t
 ParseTreeToString (parsed-digit t) = digitToString t
-ParseTreeToString (parsed-digit-range-24 t) = digit-range-24ToString t
+ParseTreeToString (parsed-digit-range-28 t) = digit-range-28ToString t
 ParseTreeToString (parsed-hour t) = hourToString t
 ParseTreeToString (parsed-minute t) = minuteToString t
 ParseTreeToString (parsed-month t) = monthToString t
@@ -250,6 +266,10 @@ ParseTreeToString (parsed-symbol-bar-17 t) = symbol-bar-17ToString t
 ParseTreeToString (parsed-symbol-bar-18 t) = symbol-bar-18ToString t
 ParseTreeToString (parsed-symbol-bar-19 t) = symbol-bar-19ToString t
 ParseTreeToString (parsed-symbol-bar-20 t) = symbol-bar-20ToString t
+ParseTreeToString (parsed-symbol-bar-21 t) = symbol-bar-21ToString t
+ParseTreeToString (parsed-symbol-bar-22 t) = symbol-bar-22ToString t
+ParseTreeToString (parsed-symbol-bar-23 t) = symbol-bar-23ToString t
+ParseTreeToString (parsed-symbol-bar-24 t) = symbol-bar-24ToString t
 ParseTreeToString (parsed-symbol-bar-5 t) = symbol-bar-5ToString t
 ParseTreeToString (parsed-symbol-bar-6 t) = symbol-bar-6ToString t
 ParseTreeToString (parsed-symbol-bar-7 t) = symbol-bar-7ToString t
@@ -257,32 +277,32 @@ ParseTreeToString (parsed-symbol-bar-8 t) = symbol-bar-8ToString t
 ParseTreeToString (parsed-symbol-bar-9 t) = symbol-bar-9ToString t
 ParseTreeToString (parsed-twodigit t) = twodigitToString t
 ParseTreeToString (parsed-words t) = wordsToString t
-ParseTreeToString (parsed-words-bar-22 t) = words-bar-22ToString t
-ParseTreeToString (parsed-words-plus-23 t) = words-plus-23ToString t
-ParseTreeToString (parsed-words-range-21 t) = words-range-21ToString t
+ParseTreeToString (parsed-words-bar-26 t) = words-bar-26ToString t
+ParseTreeToString (parsed-words-plus-27 t) = words-plus-27ToString t
+ParseTreeToString (parsed-words-range-25 t) = words-range-25ToString t
 ParseTreeToString (parsed-year t) = yearToString t
 ParseTreeToString parsed-allday = "[allday]"
 ParseTreeToString parsed-alldayA = "[alldayA]"
-ParseTreeToString parsed-alldayA-bar-31 = "[alldayA-bar-31]"
-ParseTreeToString parsed-alldayA-bar-32 = "[alldayA-bar-32]"
+ParseTreeToString parsed-alldayA-bar-35 = "[alldayA-bar-35]"
+ParseTreeToString parsed-alldayA-bar-36 = "[alldayA-bar-36]"
 ParseTreeToString parsed-alldayD = "[alldayD]"
-ParseTreeToString parsed-alldayD-bar-33 = "[alldayD-bar-33]"
-ParseTreeToString parsed-alldayD-bar-34 = "[alldayD-bar-34]"
+ParseTreeToString parsed-alldayD-bar-37 = "[alldayD-bar-37]"
+ParseTreeToString parsed-alldayD-bar-38 = "[alldayD-bar-38]"
 ParseTreeToString parsed-am = "[am]"
-ParseTreeToString parsed-am-bar-28 = "[am-bar-28]"
+ParseTreeToString parsed-am-bar-32 = "[am-bar-32]"
 ParseTreeToString parsed-aws = "[aws]"
 ParseTreeToString parsed-aws-bar-1 = "[aws-bar-1]"
 ParseTreeToString parsed-aws-bar-2 = "[aws-bar-2]"
 ParseTreeToString parsed-datesep = "[datesep]"
-ParseTreeToString parsed-datesep-bar-25 = "[datesep-bar-25]"
-ParseTreeToString parsed-datesep-bar-26 = "[datesep-bar-26]"
-ParseTreeToString parsed-datesep-bar-27 = "[datesep-bar-27]"
+ParseTreeToString parsed-datesep-bar-29 = "[datesep-bar-29]"
+ParseTreeToString parsed-datesep-bar-30 = "[datesep-bar-30]"
+ParseTreeToString parsed-datesep-bar-31 = "[datesep-bar-31]"
 ParseTreeToString parsed-ows = "[ows]"
 ParseTreeToString parsed-ows-star-4 = "[ows-star-4]"
 ParseTreeToString parsed-pm = "[pm]"
-ParseTreeToString parsed-pm-bar-29 = "[pm-bar-29]"
+ParseTreeToString parsed-pm-bar-33 = "[pm-bar-33]"
 ParseTreeToString parsed-timesep = "[timesep]"
-ParseTreeToString parsed-timesep-bar-30 = "[timesep-bar-30]"
+ParseTreeToString parsed-timesep-bar-34 = "[timesep-bar-34]"
 ParseTreeToString parsed-ws = "[ws]"
 ParseTreeToString parsed-ws-plus-3 = "[ws-plus-3]"
 

@@ -52,7 +52,6 @@ data gratr2-nt : Set where
   _month : gratr2-nt
   _minute : gratr2-nt
   _hour : gratr2-nt
-  _evtname : gratr2-nt
   _digit-range-28 : gratr2-nt
   _digit : gratr2-nt
   _day : gratr2-nt
@@ -60,7 +59,7 @@ data gratr2-nt : Set where
   _datesep-bar-30 : gratr2-nt
   _datesep-bar-29 : gratr2-nt
   _datesep : gratr2-nt
-  _date : gratr2-nt
+  _daterange : gratr2-nt
   _aws-bar-2 : gratr2-nt
   _aws-bar-1 : gratr2-nt
   _aws : gratr2-nt
@@ -120,7 +119,6 @@ gratr2-nt-eq  _other _other = tt
 gratr2-nt-eq  _month _month = tt
 gratr2-nt-eq  _minute _minute = tt
 gratr2-nt-eq  _hour _hour = tt
-gratr2-nt-eq  _evtname _evtname = tt
 gratr2-nt-eq  _digit-range-28 _digit-range-28 = tt
 gratr2-nt-eq  _digit _digit = tt
 gratr2-nt-eq  _day _day = tt
@@ -128,7 +126,7 @@ gratr2-nt-eq  _datesep-bar-31 _datesep-bar-31 = tt
 gratr2-nt-eq  _datesep-bar-30 _datesep-bar-30 = tt
 gratr2-nt-eq  _datesep-bar-29 _datesep-bar-29 = tt
 gratr2-nt-eq  _datesep _datesep = tt
-gratr2-nt-eq  _date _date = tt
+gratr2-nt-eq  _daterange _daterange = tt
 gratr2-nt-eq  _aws-bar-2 _aws-bar-2 = tt
 gratr2-nt-eq  _aws-bar-1 _aws-bar-1 = tt
 gratr2-nt-eq  _aws _aws = tt
@@ -180,7 +178,7 @@ aggycal-start _symbol-bar-12 = (just "P26" , nothing , just _symbol-bar-12 , inj
 aggycal-start _symbol-bar-11 = (just "P24" , nothing , just _symbol-bar-11 , inj₁ _symbol-bar-10 :: []) :: (just "P23" , nothing , just _symbol-bar-11 , inj₂ '_' :: []) :: []
 aggycal-start _symbol-bar-10 = (just "P22" , nothing , just _symbol-bar-10 , inj₁ _symbol-bar-9 :: []) :: (just "P21" , nothing , just _symbol-bar-10 , inj₂ '%' :: []) :: []
 aggycal-start _symbol = (just "P51" , nothing , just _symbol , inj₁ _symbol-bar-24 :: []) :: []
-aggycal-start _strt = (just "Strt" , nothing , just _strt , inj₁ _ows :: inj₁ _evtname :: inj₂ '\n' :: inj₁ _date :: inj₁ _ws :: inj₁ _timerange :: inj₁ _ows :: inj₁ _other :: inj₁ _ows :: []) :: []
+aggycal-start _strt = (just "Strt" , nothing , just _strt , inj₁ _ows :: inj₁ _words :: inj₂ '\n' :: inj₁ _daterange :: inj₁ _ws :: inj₁ _timerange :: inj₁ _ows :: inj₁ _other :: inj₁ _ows :: []) :: []
 aggycal-start _sep-bar-34 = (just "P150" , nothing , just _sep-bar-34 , inj₂ '-' :: []) :: (just "P149" , nothing , just _sep-bar-34 , inj₂ 't' :: inj₂ 'o' :: []) :: []
 aggycal-start _sep = (just "P151" , nothing , just _sep , inj₁ _sep-bar-34 :: []) :: []
 aggycal-start _posinfo = (just "Posinfo" , nothing , just _posinfo , []) :: []
@@ -192,7 +190,6 @@ aggycal-start _other = (just "OtherNil" , nothing , just _other , []) :: (just "
 aggycal-start _month = (just "P131" , nothing , just _month , inj₁ _twodigit :: []) :: []
 aggycal-start _minute = (just "P142" , nothing , just _minute , inj₁ _twodigit :: []) :: []
 aggycal-start _hour = (just "P141" , nothing , just _hour , inj₁ _twodigit :: []) :: []
-aggycal-start _evtname = (just "EventName" , nothing , just _evtname , inj₁ _words :: []) :: []
 aggycal-start _digit-range-28 = (just "P128" , nothing , just _digit-range-28 , inj₂ '9' :: []) :: (just "P127" , nothing , just _digit-range-28 , inj₂ '8' :: []) :: (just "P126" , nothing , just _digit-range-28 , inj₂ '7' :: []) :: (just "P125" , nothing , just _digit-range-28 , inj₂ '6' :: []) :: (just "P124" , nothing , just _digit-range-28 , inj₂ '5' :: []) :: (just "P123" , nothing , just _digit-range-28 , inj₂ '4' :: []) :: (just "P122" , nothing , just _digit-range-28 , inj₂ '3' :: []) :: (just "P121" , nothing , just _digit-range-28 , inj₂ '2' :: []) :: (just "P120" , nothing , just _digit-range-28 , inj₂ '1' :: []) :: (just "P119" , nothing , just _digit-range-28 , inj₂ '0' :: []) :: []
 aggycal-start _digit = (just "P129" , nothing , just _digit , inj₁ _digit-range-28 :: []) :: []
 aggycal-start _day = (just "P132" , nothing , just _day , inj₁ _twodigit :: []) :: []
@@ -200,7 +197,7 @@ aggycal-start _datesep-bar-31 = (just "P139" , nothing , just _datesep-bar-31 , 
 aggycal-start _datesep-bar-30 = (just "P137" , nothing , just _datesep-bar-30 , inj₁ _datesep-bar-29 :: []) :: (just "P136" , nothing , just _datesep-bar-30 , inj₂ '.' :: []) :: []
 aggycal-start _datesep-bar-29 = (just "P135" , nothing , just _datesep-bar-29 , inj₂ ' ' :: []) :: (just "P134" , nothing , just _datesep-bar-29 , inj₂ ',' :: []) :: []
 aggycal-start _datesep = (just "P140" , nothing , just _datesep , inj₁ _datesep-bar-31 :: []) :: []
-aggycal-start _date = (just "GlobalDateRange" , nothing , just _date , inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _ows :: inj₁ _sep :: inj₁ _ows :: inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: []) :: (just "GlobalDate" , nothing , just _date , inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: []) :: (just "AmericanDateRange" , nothing , just _date , inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: inj₁ _ows :: inj₁ _sep :: inj₁ _ows :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: []) :: (just "AmericanDate" , nothing , just _date , inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: []) :: []
+aggycal-start _daterange = (just "GlobalDateRange" , nothing , just _daterange , inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _ows :: inj₁ _sep :: inj₁ _ows :: inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: []) :: (just "GlobalDate" , nothing , just _daterange , inj₁ _year :: inj₁ _datesep :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: []) :: (just "AmericanDateRange" , nothing , just _daterange , inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: inj₁ _ows :: inj₁ _sep :: inj₁ _ows :: inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: []) :: (just "AmericanDate" , nothing , just _daterange , inj₁ _month :: inj₁ _datesep :: inj₁ _day :: inj₁ _datesep :: inj₁ _year :: []) :: []
 aggycal-start _aws-bar-2 = (just "P3" , nothing , just _aws-bar-2 , inj₁ _aws-bar-1 :: []) :: (just "P2" , nothing , just _aws-bar-2 , inj₂ '\n' :: []) :: []
 aggycal-start _aws-bar-1 = (just "P1" , nothing , just _aws-bar-1 , inj₂ ' ' :: []) :: (just "P0" , nothing , just _aws-bar-1 , inj₂ '\t' :: []) :: []
 aggycal-start _aws = (just "P4" , nothing , just _aws , inj₁ _aws-bar-2 :: []) :: []
@@ -231,12 +228,11 @@ open noderiv
 len-dec-rewrite : Run → maybe (Run × ℕ)
 len-dec-rewrite {- AM-} ((Id "AM") :: _::_(ParseTree parsed-am) rest) = just (ParseTree (parsed-whichm (norm-whichm AM)) ::' rest , 2)
 len-dec-rewrite {- AllDayRange-} ((Id "AllDayRange") :: _::_(ParseTree parsed-allday) rest) = just (ParseTree (parsed-timerange (norm-timerange AllDayRange)) ::' rest , 2)
-len-dec-rewrite {- AmericanDate-} ((Id "AmericanDate") :: (ParseTree (parsed-month x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x1)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-year x2)) rest) = just (ParseTree (parsed-date (norm-date (AmericanDate x0 x1 x2))) ::' rest , 6)
-len-dec-rewrite {- AmericanDateRange-} ((Id "AmericanDateRange") :: (ParseTree (parsed-month x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x1)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-year x2)) :: (ParseTree parsed-ows) :: (ParseTree parsed-sep) :: (ParseTree parsed-ows) :: (ParseTree (parsed-month x3)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x4)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-year x5)) rest) = just (ParseTree (parsed-date (norm-date (AmericanDateRange x0 x1 x2 x3 x4 x5))) ::' rest , 14)
+len-dec-rewrite {- AmericanDate-} ((Id "AmericanDate") :: (ParseTree (parsed-month x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x1)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-year x2)) rest) = just (ParseTree (parsed-daterange (norm-daterange (AmericanDate x0 x1 x2))) ::' rest , 6)
+len-dec-rewrite {- AmericanDateRange-} ((Id "AmericanDateRange") :: (ParseTree (parsed-month x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x1)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-year x2)) :: (ParseTree parsed-ows) :: (ParseTree parsed-sep) :: (ParseTree parsed-ows) :: (ParseTree (parsed-month x3)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x4)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-year x5)) rest) = just (ParseTree (parsed-daterange (norm-daterange (AmericanDateRange x0 x1 x2 x3 x4 x5))) ::' rest , 14)
 len-dec-rewrite {- Description-} ((Id "Description") :: (ParseTree (parsed-words x0)) :: (ParseTree parsed-ws) :: _::_(ParseTree (parsed-other x1)) rest) = just (ParseTree (parsed-other (norm-other (Description x0 x1))) ::' rest , 4)
-len-dec-rewrite {- EventName-} ((Id "EventName") :: _::_(ParseTree (parsed-words x0)) rest) = just (ParseTree (parsed-evtname (norm-evtname (EventName x0))) ::' rest , 2)
-len-dec-rewrite {- GlobalDate-} ((Id "GlobalDate") :: (ParseTree (parsed-year x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x1)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-day x2)) rest) = just (ParseTree (parsed-date (norm-date (GlobalDate x0 x1 x2))) ::' rest , 6)
-len-dec-rewrite {- GlobalDateRange-} ((Id "GlobalDateRange") :: (ParseTree (parsed-year x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x1)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x2)) :: (ParseTree parsed-ows) :: (ParseTree parsed-sep) :: (ParseTree parsed-ows) :: (ParseTree (parsed-year x3)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x4)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-day x5)) rest) = just (ParseTree (parsed-date (norm-date (GlobalDateRange x0 x1 x2 x3 x4 x5))) ::' rest , 14)
+len-dec-rewrite {- GlobalDate-} ((Id "GlobalDate") :: (ParseTree (parsed-year x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x1)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-day x2)) rest) = just (ParseTree (parsed-daterange (norm-daterange (GlobalDate x0 x1 x2))) ::' rest , 6)
+len-dec-rewrite {- GlobalDateRange-} ((Id "GlobalDateRange") :: (ParseTree (parsed-year x0)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x1)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-day x2)) :: (ParseTree parsed-ows) :: (ParseTree parsed-sep) :: (ParseTree parsed-ows) :: (ParseTree (parsed-year x3)) :: (ParseTree parsed-datesep) :: (ParseTree (parsed-month x4)) :: (ParseTree parsed-datesep) :: _::_(ParseTree (parsed-day x5)) rest) = just (ParseTree (parsed-daterange (norm-daterange (GlobalDateRange x0 x1 x2 x3 x4 x5))) ::' rest , 14)
 len-dec-rewrite {- MilitaryTime-} ((Id "MilitaryTime") :: (ParseTree (parsed-hour x0)) :: (InputChar ':') :: _::_(ParseTree (parsed-minute x1)) rest) = just (ParseTree (parsed-time (norm-time (MilitaryTime x0 x1))) ::' rest , 4)
 len-dec-rewrite {- P0-} ((Id "P0") :: _::_(InputChar '\t') rest) = just (ParseTree parsed-aws-bar-1 ::' rest , 2)
 len-dec-rewrite {- P1-} ((Id "P1") :: _::_(InputChar ' ') rest) = just (ParseTree parsed-aws-bar-1 ::' rest , 2)
@@ -402,7 +398,7 @@ len-dec-rewrite {- P98-} ((Id "P98") :: _::_(InputChar 'k') rest) = just (ParseT
 len-dec-rewrite {- P99-} ((Id "P99") :: _::_(InputChar 'l') rest) = just (ParseTree (parsed-words-range-25 (string-append 0 (char-to-string 'l'))) ::' rest , 2)
 len-dec-rewrite {- PM-} ((Id "PM") :: _::_(ParseTree parsed-pm) rest) = just (ParseTree (parsed-whichm (norm-whichm PM)) ::' rest , 2)
 len-dec-rewrite {- RegTime-} ((Id "RegTime") :: (ParseTree (parsed-hour x0)) :: (InputChar ':') :: (ParseTree (parsed-minute x1)) :: (ParseTree parsed-ows) :: _::_(ParseTree (parsed-whichm x2)) rest) = just (ParseTree (parsed-time (norm-time (RegTime x0 x1 x2))) ::' rest , 6)
-len-dec-rewrite {- Strt-} ((Id "Strt") :: (ParseTree parsed-ows) :: (ParseTree (parsed-evtname x0)) :: (InputChar '\n') :: (ParseTree (parsed-date x1)) :: (ParseTree parsed-ws) :: (ParseTree (parsed-timerange x2)) :: (ParseTree parsed-ows) :: (ParseTree (parsed-other x3)) :: _::_(ParseTree parsed-ows) rest) = just (ParseTree (parsed-strt (norm-strt (Strt x0 x1 x2 x3))) ::' rest , 10)
+len-dec-rewrite {- Strt-} ((Id "Strt") :: (ParseTree parsed-ows) :: (ParseTree (parsed-words x0)) :: (InputChar '\n') :: (ParseTree (parsed-daterange x1)) :: (ParseTree parsed-ws) :: (ParseTree (parsed-timerange x2)) :: (ParseTree parsed-ows) :: (ParseTree (parsed-other x3)) :: _::_(ParseTree parsed-ows) rest) = just (ParseTree (parsed-strt (norm-strt (Strt x0 x1 x2 x3))) ::' rest , 10)
 len-dec-rewrite {- TimeRange-} ((Id "TimeRange") :: (ParseTree (parsed-time x0)) :: (ParseTree parsed-ows) :: (ParseTree parsed-sep) :: (ParseTree parsed-ows) :: _::_(ParseTree (parsed-time x1)) rest) = just (ParseTree (parsed-timerange (norm-timerange (TimeRange x0 x1))) ::' rest , 6)
 len-dec-rewrite {- OtherNil-} (_::_(Id "OtherNil") rest) = just (ParseTree (parsed-other (norm-other OtherNil)) ::' rest , 1)
 len-dec-rewrite {- P8-} (_::_(Id "P8") rest) = just (ParseTree parsed-ows-star-4 ::' rest , 1)

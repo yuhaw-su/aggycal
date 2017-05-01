@@ -16,26 +16,52 @@ open noderiv {- from run.agda -}
 open import evt-info
 open import addit-evt-info
 
-{-idlist-to-𝕃 : idlist → 𝕃 id
-idlist-to-𝕃 (IdListEnd id) = [ id ]
-idlist-to-𝕃 (IdListNext id idlist) = id :: idlist-to-𝕃 idlist
-idlist-to-𝕃 IdListNil = []
+extract-addit-evt-info : other → 𝕃 addit-evt-info
+extract-addit-evt-info (Description d o) = (desc d) :: (extract-addit-evt-info o)
+extract-addit-evt-info OtherNil = []
 
-edges-to-graph-t : graph-t → edges → graph-t
-edges-to-graph-t g EdgesEnd = g
-edges-to-graph-t g (EdgesNext id idlist edges) = edges-to-graph-t (𝕃trie-add* g id (idlist-to-𝕃 idlist)) edges
+add-allday : 𝔹 → addit-evt-info
+add-allday b = allday b
 
-strt-to-mg : strt → mg
-strt-to-mg (Strt roots edges) with (idlist-to-𝕃 roots)
-... | r = mkmg r empty-stringset r (edges-to-graph-t empty-trie edges)-}
+{- for all-day substitute -}
+midnight : aTime
+midnight = "00" , "00"
+
+adjust-time-with-ampm : time → aTime
+adjust-time-with-ampm (MilitaryTime hour min) = hour , min
+adjust-time-with-ampm (RegTime hour min ampm) with ampm
+... | AM = hour , min
+... | PM = (ℕ-to-string ((string-to-ℕ0 hour) + 12)) , min
+
+extract-datetimes : daterange → timerange → datetime × datetime
+extract-datetimes dates times with dates
+extract-datetimes dates times | AmericanDate m d y with times
+... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
+... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | AmericanDateRange m1 d1 y1 m2 d2 y2 with times
+... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
+... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | GlobalDate y m d with times
+... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
+... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | GlobalDateRange y1 m1 d1 y2 m2 d2 with times
+... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
+... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
 
 strt-to-evt-info : strt → evt-info
-strt-to-evt-info (Strt name daterange timerange addit-info) with timerange
-... | AllDayRange = {!!}
-... | TimeRange x x₁ = {!!}
+strt-to-evt-info (Strt name dates times addit-info) with extract-datetimes dates times
+... | sDT , eDT with times
+... | AllDayRange = evt name sDT eDT ((add-allday tt) :: (extract-addit-evt-info addit-info))
+... | (TimeRange x x₁) = evt name sDT eDT (extract-addit-evt-info addit-info)
 
 process-strt : strt → string
-process-strt s = ""
+process-strt s =
+  "BEGIN:VCALENDAR\n" ^
+  "PRODID:aggycal woot\n" ^
+  "VERSION:2.0\n" ^
+  "CALSCALE:GREGORIAN\n" ^
+  evt-info-to-string (strt-to-evt-info s) ^
+  "END:VCALENDAR\n"
 
 process : Run → IO ⊤
 process (ParseTree (parsed-strt p) :: []) =

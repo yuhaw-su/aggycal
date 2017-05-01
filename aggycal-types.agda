@@ -44,21 +44,18 @@ year = string
 
 mutual
 
-  data date : Set where 
-    AmericanDate : month → day → year → date
-    AmericanDateRange : month → day → year → month → day → year → date
-    GlobalDate : year → month → day → date
-    GlobalDateRange : year → month → day → year → month → day → date
-
-  data evtname : Set where 
-    EventName : words → evtname
+  data daterange : Set where 
+    AmericanDate : month → day → year → daterange
+    AmericanDateRange : month → day → year → month → day → year → daterange
+    GlobalDate : year → month → day → daterange
+    GlobalDateRange : year → month → day → year → month → day → daterange
 
   data other : Set where 
     Description : words → other → other
     OtherNil : other
 
   data strt : Set where 
-    Strt : evtname → date → timerange → other → strt
+    Strt : words → daterange → timerange → other → strt
 
   data time : Set where 
     MilitaryTime : hour → minute → time
@@ -75,8 +72,7 @@ mutual
 -- embedded types:
 
 data ParseTreeT : Set where
-  parsed-date : date → ParseTreeT
-  parsed-evtname : evtname → ParseTreeT
+  parsed-daterange : daterange → ParseTreeT
   parsed-other : other → ParseTreeT
   parsed-strt : strt → ParseTreeT
   parsed-time : time → ParseTreeT
@@ -215,21 +211,18 @@ yearToString : year → string
 yearToString x = "(year " ^ x ^ ")"
 
 mutual
-  dateToString : date → string
-  dateToString (AmericanDate x0 x1 x2) = "(AmericanDate" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ ")"
-  dateToString (AmericanDateRange x0 x1 x2 x3 x4 x5) = "(AmericanDateRange" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ " " ^ (monthToString x3) ^ " " ^ (dayToString x4) ^ " " ^ (yearToString x5) ^ ")"
-  dateToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
-  dateToString (GlobalDateRange x0 x1 x2 x3 x4 x5) = "(GlobalDateRange" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ " " ^ (yearToString x3) ^ " " ^ (monthToString x4) ^ " " ^ (dayToString x5) ^ ")"
-
-  evtnameToString : evtname → string
-  evtnameToString (EventName x0) = "(EventName" ^ " " ^ (wordsToString x0) ^ ")"
+  daterangeToString : daterange → string
+  daterangeToString (AmericanDate x0 x1 x2) = "(AmericanDate" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ ")"
+  daterangeToString (AmericanDateRange x0 x1 x2 x3 x4 x5) = "(AmericanDateRange" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ " " ^ (monthToString x3) ^ " " ^ (dayToString x4) ^ " " ^ (yearToString x5) ^ ")"
+  daterangeToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
+  daterangeToString (GlobalDateRange x0 x1 x2 x3 x4 x5) = "(GlobalDateRange" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ " " ^ (yearToString x3) ^ " " ^ (monthToString x4) ^ " " ^ (dayToString x5) ^ ")"
 
   otherToString : other → string
   otherToString (Description x0 x1) = "(Description" ^ " " ^ (wordsToString x0) ^ " " ^ (otherToString x1) ^ ")"
   otherToString (OtherNil) = "OtherNil" ^ ""
 
   strtToString : strt → string
-  strtToString (Strt x0 x1 x2 x3) = "(Strt" ^ " " ^ (evtnameToString x0) ^ " " ^ (dateToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
+  strtToString (Strt x0 x1 x2 x3) = "(Strt" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
 
   timeToString : time → string
   timeToString (MilitaryTime x0 x1) = "(MilitaryTime" ^ " " ^ (hourToString x0) ^ " " ^ (minuteToString x1) ^ ")"
@@ -244,8 +237,7 @@ mutual
   whichmToString (PM) = "PM" ^ ""
 
 ParseTreeToString : ParseTreeT → string
-ParseTreeToString (parsed-date t) = dateToString t
-ParseTreeToString (parsed-evtname t) = evtnameToString t
+ParseTreeToString (parsed-daterange t) = daterangeToString t
 ParseTreeToString (parsed-other t) = otherToString t
 ParseTreeToString (parsed-strt t) = strtToString t
 ParseTreeToString (parsed-time t) = timeToString t
@@ -341,12 +333,8 @@ mutual
   norm-other x = x
 
   {-# TERMINATING #-}
-  norm-evtname : (x : evtname) → evtname
-  norm-evtname x = x
-
-  {-# TERMINATING #-}
-  norm-date : (x : date) → date
-  norm-date x = x
+  norm-daterange : (x : daterange) → daterange
+  norm-daterange x = x
 
 isParseTree : ParseTreeT → 𝕃 char → string → Set
 isParseTree p l s = ⊤ {- this will be ignored since we are using simply typed runs -}

@@ -1,0 +1,93 @@
+module acal where
+
+open import lib
+open import aggycal-types
+
+aDate : Set
+aDate = year × month × day
+
+aTime : Set
+aTime = hour × minute
+
+aTimeRange : Set
+aTimeRange = aTime × aTime
+
+data acal : Set where
+  evt :  words {- event name -} →
+         aDate {- event date -} →
+         aTimeRange {- event start and end times -} →
+         words {- description -} →
+         acal
+
+  xf
+
+{- used for testing purposes -}
+acal-to-string : acal → string
+acal-to-string (evt name (year , month , day) ((sHour , sMin) , (eHour , eMin)) description) = 
+  "Event Name: " ^ name ^
+  "\nDate: " ^ year ^ "/" ^ month ^ "/" ^ day ^
+  "\nStart Time: " ^ sHour ^ ":" ^ sMin ^
+  "\nEnd Time: " ^ eHour ^ ":" ^ eMin ^
+  "\nDescription: " ^ description
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+format-nodes-for-gv : 𝕃 string → mg → string
+format-nodes-for-gv [] mg = ""
+format-nodes-for-gv (x :: l) mg = (format-node-for-gv x mg) ^ (format-nodes-for-gv l mg)
+
+mg-to-gv-h : 𝕃 (string × 𝕃 string) → mg → string
+mg-to-gv-h [] mg = ""
+mg-to-gv-h ((parent , children) :: l) mg =
+  (format-node-for-gv parent mg) ^ (format-nodes-for-gv children mg) ^
+  parent ^ " -> { " ^ (string-concat-sep " " children) ^ "};\n" ^
+  (mg-to-gv-h l mg)
+
+format-roots-for-gv : 𝕃 string → ℕ → string
+format-roots-for-gv [] n = ""
+format-roots-for-gv (x :: l) n =
+  "hidden" ^ ℕ-to-string n ^ " [shape = plaintext , label = \"\"];hidden" ^ ℕ-to-string n ^ " -> " ^ x ^ "\n" ^
+  format-roots-for-gv l (suc n)
+
+mg-to-gv : mg → string
+mg-to-gv (mkmg roots marked next graph) =
+  "digraph mem {\n" ^
+  mg-to-gv-h (trie-mappings graph) (mkmg roots marked next graph) ^
+  format-roots-for-gv roots zero ^
+  "}"
+
+mg-to-string : 𝔹 →  mg → string
+mg-to-string tt = mg-to-string-simple
+mg-to-string ff = mg-to-gv
+
+remove-nodes : 𝕃 (string × 𝕃 string) → mg → mg
+remove-nodes [] mg = mg
+remove-nodes ((parent , _) :: l) (mkmg roots marked next graph) with stringset-contains marked parent
+... | tt = remove-nodes l (mkmg roots marked next graph)
+... | ff = remove-nodes l (mkmg roots marked next (trie-remove graph parent))
+
+collect-garbage : mg → mg
+collect-garbage (mkmg roots marked next graph) = remove-nodes (trie-mappings graph) (mkmg roots marked next graph)
+
+{-# NON_TERMINATING #-}
+traverse : 𝕃 string → mg → 𝔹 → 𝕃 string
+traverse l (mkmg r m (n :: t) g) gv with stringset-contains m n
+... | ff = let newState = (mkmg r (stringset-insert m n) (t ++ (𝕃trie-lookup g n)) g) in
+             traverse (l ++ [ mg-to-string gv (mkmg r m (n :: t) g) ]) newState gv
+... | tt = traverse (l ++ [ mg-to-string gv (mkmg r m (n :: t) g) ]) (mkmg r m t g) gv
+traverse l mg gv = l ++ [ mg-to-string gv mg ] ++ [ mg-to-string gv (collect-garbage mg) ]
+
+generate-traversal : mg → 𝕃 string
+generate-traversal mg = traverse [] mg ff -- tt for simple version, ff for gv
+-}

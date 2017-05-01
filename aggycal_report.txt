@@ -1,5 +1,5 @@
 Beginning processing of grammar aggycal.
-(Time elapsed: 0.001)
+(Time elapsed: 0.002)
 Converted grammar to AST for grammars.
 aggycal
 
@@ -12,18 +12,20 @@ strt
 Syntactic
 
 Posinfo : posinfo -> .
-Strt : strt -> ows evtname '\n' date ws timerange ows description ows .
+Strt : strt -> ows evtname '\n' date ws timerange ows other ows .
 EventName : evtname -> words .
 AmericanDate : date -> month datesep day datesep year .
 GlobalDate : date -> year datesep month datesep day .
+AmericanDateRange : date -> month datesep day datesep year ows sep ows month datesep day datesep year .
+GlobalDateRange : date -> year datesep month datesep day ows sep ows year datesep month datesep day .
 PM : whichm -> pm .
 AM : whichm -> am .
 RegTime : time -> hour ':' minute ows whichm .
 MilitaryTime : time -> hour ':' minute .
-TimeRange : timerange -> time ows timesep ows time .
+TimeRange : timerange -> time ows sep ows time .
 AllDayRange : timerange -> allday .
-NoDescription : description -> .
-Description : description -> words .
+OtherNil : other -> .
+Description : other -> words ws other .
 
 
 Lexical
@@ -177,9 +179,9 @@ am => am-bar-32 .
 pm-bar-33 => 'P' 'M' .
 pm-bar-33 => 'p' 'm' .
 pm => pm-bar-33 .
-timesep-bar-34 => 't' 'o' .
-timesep-bar-34 => '-' .
-timesep => timesep-bar-34 .
+sep-bar-34 => 't' 'o' .
+sep-bar-34 => '-' .
+sep => sep-bar-34 .
 alldayA-bar-35 => 'A' 'l' 'l' .
 alldayA-bar-35 => 'A' 'L' 'L' .
 alldayA-bar-36 => 'a' 'l' 'l' .
@@ -202,13 +204,13 @@ Rules
 
 
 Syntactic non-terminals (defined by syntactic productions):
-  whichm timerange time strt posinfo evtname description date 
+  whichm timerange time strt posinfo other evtname date 
 
 Reading non-terminals (defined by lexical ->-productions):
   year words-range-25 words-plus-27 words-bar-26 words twodigit symbol-bar-9 symbol-bar-8 symbol-bar-7 symbol-bar-6 symbol-bar-5 symbol-bar-24 symbol-bar-23 symbol-bar-22 symbol-bar-21 symbol-bar-20 symbol-bar-19 symbol-bar-18 symbol-bar-17 symbol-bar-16 symbol-bar-15 symbol-bar-14 symbol-bar-13 symbol-bar-12 symbol-bar-11 symbol-bar-10 symbol month minute hour digit-range-28 digit day 
 
 Recognizing non-terminals (defined by lexical =>-productions):
-  ws-plus-3 ws timesep-bar-34 timesep pm-bar-33 pm ows-star-4 ows datesep-bar-31 datesep-bar-30 datesep-bar-29 datesep aws-bar-2 aws-bar-1 aws am-bar-32 am alldayD-bar-38 alldayD-bar-37 alldayD alldayA-bar-36 alldayA-bar-35 alldayA allday 
+  ws-plus-3 ws sep-bar-34 sep pm-bar-33 pm ows-star-4 ows datesep-bar-31 datesep-bar-30 datesep-bar-29 datesep aws-bar-2 aws-bar-1 aws am-bar-32 am alldayD-bar-38 alldayD-bar-37 alldayD alldayA-bar-36 alldayA-bar-35 alldayA allday 
 
 Terminal symbols:
   '”' '“' '’' '‘' 'z' 'y' 'x' 'w' 'v' 'u' 't' 's' 'r' 'q' 'p' 'o' 'n' 'm' 'l' 'k' 'j' 'i' 'h' 'g' 'f' 'e' 'd' 'c' 'b' 'a' '_' '\t' '\n' '\'' 'Z' 'Y' 'X' 'W' 'V' 'U' 'T' 'S' 'R' 'Q' 'P' 'O' 'N' 'M' 'L' 'K' 'J' 'I' 'H' 'G' 'F' 'E' 'D' 'C' 'B' 'A' '@' '?' ';' ':' '9' '8' '7' '6' '5' '4' '3' '2' '1' '0' '/' '.' '-' ',' '+' ')' '(' '%' '$' '#' '"' '!' ' ' 
@@ -220,11 +222,13 @@ Terminal symbols:
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
-Description:  words[0] -> description[Description(x0)]
+AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> date[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
+Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
 EventName:  words[0] -> evtname[EventName(x0)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
+GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> date[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
-NoDescription:  -> description[NoDescription]
+OtherNil:  -> other[OtherNil]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
 P10:  #ows-star-4 -> ows[]
@@ -281,10 +285,10 @@ P145:  #am-bar-32 -> am[]
 P146:  #'P' #'M' -> pm-bar-33[]
 P147:  #'p' #'m' -> pm-bar-33[]
 P148:  #pm-bar-33 -> pm[]
-P149:  #'t' #'o' -> timesep-bar-34[]
+P149:  #'t' #'o' -> sep-bar-34[]
 P15:  '‘' -> symbol-bar-7[string-append(0, char-to-string('‘'))]
-P150:  #'-' -> timesep-bar-34[]
-P151:  #timesep-bar-34 -> timesep[]
+P150:  #'-' -> sep-bar-34[]
+P151:  #sep-bar-34 -> sep[]
 P152:  #'A' #'l' #'l' -> alldayA-bar-35[]
 P153:  #'A' #'L' #'L' -> alldayA-bar-35[]
 P154:  #'a' #'l' #'l' -> alldayA-bar-36[]
@@ -391,16 +395,16 @@ P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows description[3] #ows -> strt[Strt(x0, x1, x2, x3)]
-TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
+Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows other[3] #ows -> strt[Strt(x0, x1, x2, x3)]
+TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
 (The reorganizing TRS is terminating.)
 (Derivational complexity of the reorganizing TRS: O(n^0))
 (Local confluence of the reorganizing TRS: true)
 
-(Time elapsed: 0.013)
-Found nullable (description, NoDescription)
+(Time elapsed: 0.014)
+Found nullable (other, OtherNil)
 Found nullable (ows-star-4, P8)
 Found nullable (posinfo, Posinfo)
 Found nullable (ows, P10)
@@ -410,11 +414,13 @@ Found nullable (ows, P10)
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
-Description:  words[0] -> description[Description(x0)]
+AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> date[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
+Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
 EventName:  words[0] -> evtname[EventName(x0)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
+GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> date[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
-NoDescription:  -> description[NoDescription]
+OtherNil:  -> other[OtherNil]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
 P10:  #ows-star-4 -> ows[]
@@ -471,10 +477,10 @@ P145:  #am-bar-32 -> am[]
 P146:  #'P' #'M' -> pm-bar-33[]
 P147:  #'p' #'m' -> pm-bar-33[]
 P148:  #pm-bar-33 -> pm[]
-P149:  #'t' #'o' -> timesep-bar-34[]
+P149:  #'t' #'o' -> sep-bar-34[]
 P15:  '‘' -> symbol-bar-7[string-append(0, char-to-string('‘'))]
-P150:  #'-' -> timesep-bar-34[]
-P151:  #timesep-bar-34 -> timesep[]
+P150:  #'-' -> sep-bar-34[]
+P151:  #sep-bar-34 -> sep[]
 P152:  #'A' #'l' #'l' -> alldayA-bar-35[]
 P153:  #'A' #'L' #'L' -> alldayA-bar-35[]
 P154:  #'a' #'l' #'l' -> alldayA-bar-36[]
@@ -581,19 +587,21 @@ P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows description[3] #ows -> strt[Strt(x0, x1, x2, x3)]
-TimeRange:  time[0] #ows #timesep #ows time[1] -> timerange[TimeRange(x0, x1)]
+Strt:  #ows evtname[0] #'\n' date[1] #ws timerange[2] #ows other[3] #ows -> strt[Strt(x0, x1, x2, x3)]
+TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
 (The TRS corresponding to the final parsing TRS:
 AM: AM . am . x1 -> whichm(AM) . x1
 AllDayRange: AllDayRange . allday . x1 -> timerange(AllDayRange) . x1
 AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> date(AmericanDate(x0, x1, x2)) . x3
-Description: Description . words(x0) . x1 -> description(Description(x0)) . x1
+AmericanDateRange: AmericanDateRange . month(x0) . datesep . day(x1) . datesep . year(x2) . ows . sep . ows . month(x3) . datesep . day(x4) . datesep . year(x5) . x6 -> date(AmericanDateRange(x0, x1, x2, x3, x4, x5)) . x6
+Description: Description . words(x0) . ws . other(x1) . x2 -> other(Description(x0, x1)) . x2
 EventName: EventName . words(x0) . x1 -> evtname(EventName(x0)) . x1
 GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> date(GlobalDate(x0, x1, x2)) . x3
+GlobalDateRange: GlobalDateRange . year(x0) . datesep . month(x1) . datesep . day(x2) . ows . sep . ows . year(x3) . datesep . month(x4) . datesep . day(x5) . x6 -> date(GlobalDateRange(x0, x1, x2, x3, x4, x5)) . x6
 MilitaryTime: MilitaryTime . hour(x0) . ':' . minute(x1) . x2 -> time(MilitaryTime(x0, x1)) . x2
-NoDescription: NoDescription . x1 -> description(NoDescription) . x1
+OtherNil: OtherNil . x1 -> other(OtherNil) . x1
 P0: P0 . '\t' . x1 -> aws-bar-1 . x1
 P1: P1 . ' ' . x1 -> aws-bar-1 . x1
 P10: P10 . ows-star-4 . x1 -> ows . x1
@@ -650,10 +658,10 @@ P145: P145 . am-bar-32 . x1 -> am . x1
 P146: P146 . 'P' . 'M' . x1 -> pm-bar-33 . x1
 P147: P147 . 'p' . 'm' . x1 -> pm-bar-33 . x1
 P148: P148 . pm-bar-33 . x1 -> pm . x1
-P149: P149 . 't' . 'o' . x1 -> timesep-bar-34 . x1
+P149: P149 . 't' . 'o' . x1 -> sep-bar-34 . x1
 P15: P15 . '‘' . x1 -> symbol-bar-7(string-append(0, char-to-string('‘'))) . x1
-P150: P150 . '-' . x1 -> timesep-bar-34 . x1
-P151: P151 . timesep-bar-34 . x1 -> timesep . x1
+P150: P150 . '-' . x1 -> sep-bar-34 . x1
+P151: P151 . sep-bar-34 . x1 -> sep . x1
 P152: P152 . 'A' . 'l' . 'l' . x1 -> alldayA-bar-35 . x1
 P153: P153 . 'A' . 'L' . 'L' . x1 -> alldayA-bar-35 . x1
 P154: P154 . 'a' . 'l' . 'l' . x1 -> alldayA-bar-36 . x1
@@ -760,8 +768,8 @@ P99: P99 . 'l' . x1 -> words-range-25(string-append(0, char-to-string('l'))) . x
 PM: PM . pm . x1 -> whichm(PM) . x1
 Posinfo: Posinfo . x1 -> posinfo(Posinfo) . x1
 RegTime: RegTime . hour(x0) . ':' . minute(x1) . ows . whichm(x2) . x3 -> time(RegTime(x0, x1, x2)) . x3
-Strt: Strt . ows . evtname(x0) . '\n' . date(x1) . ws . timerange(x2) . ows . description(x3) . ows . x4 -> strt(Strt(x0, x1, x2, x3)) . x4
-TimeRange: TimeRange . time(x0) . ows . timesep . ows . time(x1) . x2 -> timerange(TimeRange(x0, x1)) . x2
+Strt: Strt . ows . evtname(x0) . '\n' . date(x1) . ws . timerange(x2) . ows . other(x3) . ows . x4 -> strt(Strt(x0, x1, x2, x3)) . x4
+TimeRange: TimeRange . time(x0) . ows . sep . ows . time(x1) . x2 -> timerange(TimeRange(x0, x1)) . x2
 )
 (No reorganizing critical pairs found.)
 (No parsing critical pairs found.)

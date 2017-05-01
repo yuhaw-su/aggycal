@@ -46,17 +46,19 @@ mutual
 
   data date : Set where 
     AmericanDate : month → day → year → date
+    AmericanDateRange : month → day → year → month → day → year → date
     GlobalDate : year → month → day → date
-
-  data description : Set where 
-    Description : words → description
-    NoDescription : description
+    GlobalDateRange : year → month → day → year → month → day → date
 
   data evtname : Set where 
     EventName : words → evtname
 
+  data other : Set where 
+    Description : words → other → other
+    OtherNil : other
+
   data strt : Set where 
-    Strt : evtname → date → timerange → description → strt
+    Strt : evtname → date → timerange → other → strt
 
   data time : Set where 
     MilitaryTime : hour → minute → time
@@ -74,8 +76,8 @@ mutual
 
 data ParseTreeT : Set where
   parsed-date : date → ParseTreeT
-  parsed-description : description → ParseTreeT
   parsed-evtname : evtname → ParseTreeT
+  parsed-other : other → ParseTreeT
   parsed-strt : strt → ParseTreeT
   parsed-time : time → ParseTreeT
   parsed-timerange : timerange → ParseTreeT
@@ -134,8 +136,8 @@ data ParseTreeT : Set where
   parsed-ows-star-4 : ParseTreeT
   parsed-pm : ParseTreeT
   parsed-pm-bar-33 : ParseTreeT
-  parsed-timesep : ParseTreeT
-  parsed-timesep-bar-34 : ParseTreeT
+  parsed-sep : ParseTreeT
+  parsed-sep-bar-34 : ParseTreeT
   parsed-ws : ParseTreeT
   parsed-ws-plus-3 : ParseTreeT
 
@@ -215,17 +217,19 @@ yearToString x = "(year " ^ x ^ ")"
 mutual
   dateToString : date → string
   dateToString (AmericanDate x0 x1 x2) = "(AmericanDate" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ ")"
+  dateToString (AmericanDateRange x0 x1 x2 x3 x4 x5) = "(AmericanDateRange" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ " " ^ (monthToString x3) ^ " " ^ (dayToString x4) ^ " " ^ (yearToString x5) ^ ")"
   dateToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
-
-  descriptionToString : description → string
-  descriptionToString (Description x0) = "(Description" ^ " " ^ (wordsToString x0) ^ ")"
-  descriptionToString (NoDescription) = "NoDescription" ^ ""
+  dateToString (GlobalDateRange x0 x1 x2 x3 x4 x5) = "(GlobalDateRange" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ " " ^ (yearToString x3) ^ " " ^ (monthToString x4) ^ " " ^ (dayToString x5) ^ ")"
 
   evtnameToString : evtname → string
   evtnameToString (EventName x0) = "(EventName" ^ " " ^ (wordsToString x0) ^ ")"
 
+  otherToString : other → string
+  otherToString (Description x0 x1) = "(Description" ^ " " ^ (wordsToString x0) ^ " " ^ (otherToString x1) ^ ")"
+  otherToString (OtherNil) = "OtherNil" ^ ""
+
   strtToString : strt → string
-  strtToString (Strt x0 x1 x2 x3) = "(Strt" ^ " " ^ (evtnameToString x0) ^ " " ^ (dateToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (descriptionToString x3) ^ ")"
+  strtToString (Strt x0 x1 x2 x3) = "(Strt" ^ " " ^ (evtnameToString x0) ^ " " ^ (dateToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
 
   timeToString : time → string
   timeToString (MilitaryTime x0 x1) = "(MilitaryTime" ^ " " ^ (hourToString x0) ^ " " ^ (minuteToString x1) ^ ")"
@@ -241,8 +245,8 @@ mutual
 
 ParseTreeToString : ParseTreeT → string
 ParseTreeToString (parsed-date t) = dateToString t
-ParseTreeToString (parsed-description t) = descriptionToString t
 ParseTreeToString (parsed-evtname t) = evtnameToString t
+ParseTreeToString (parsed-other t) = otherToString t
 ParseTreeToString (parsed-strt t) = strtToString t
 ParseTreeToString (parsed-time t) = timeToString t
 ParseTreeToString (parsed-timerange t) = timerangeToString t
@@ -301,8 +305,8 @@ ParseTreeToString parsed-ows = "[ows]"
 ParseTreeToString parsed-ows-star-4 = "[ows-star-4]"
 ParseTreeToString parsed-pm = "[pm]"
 ParseTreeToString parsed-pm-bar-33 = "[pm-bar-33]"
-ParseTreeToString parsed-timesep = "[timesep]"
-ParseTreeToString parsed-timesep-bar-34 = "[timesep-bar-34]"
+ParseTreeToString parsed-sep = "[sep]"
+ParseTreeToString parsed-sep-bar-34 = "[sep-bar-34]"
 ParseTreeToString parsed-ws = "[ws]"
 ParseTreeToString parsed-ws-plus-3 = "[ws-plus-3]"
 
@@ -333,12 +337,12 @@ mutual
   norm-posinfo x = x
 
   {-# TERMINATING #-}
-  norm-evtname : (x : evtname) → evtname
-  norm-evtname x = x
+  norm-other : (x : other) → other
+  norm-other x = x
 
   {-# TERMINATING #-}
-  norm-description : (x : description) → description
-  norm-description x = x
+  norm-evtname : (x : evtname) → evtname
+  norm-evtname x = x
 
   {-# TERMINATING #-}
   norm-date : (x : date) → date

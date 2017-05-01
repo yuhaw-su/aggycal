@@ -31,8 +31,8 @@ strt-to-mg (Strt roots edges) with (idlist-to-𝕃 roots)
 
 strt-to-evt-info : strt → evt-info
 strt-to-evt-info (Strt name daterange timerange addit-info) with timerange
-strt-to-evt-info (Strt name daterange timerange₁ addit-info) | AllDayRange = ?
-strt-to-evt-info (Strt name daterange timerange₁ addit-info) | TimeRange x x₁ = ?
+... | AllDayRange = {!!}
+... | TimeRange x x₁ = {!!}
 
 process-strt : strt → string
 process-strt s = ""

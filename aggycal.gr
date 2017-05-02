@@ -6,7 +6,10 @@ strt
 
 Syntactic
 
-Strt : strt ->  ows words '\n' daterange ws timerange ows other ows .
+Strt : strt ->  ows event ows .
+
+EventCons : event -> words '\n' daterange ws timerange ows other ows '\n' ows '\n' ows event .
+EventFinal : event -> words '\n' daterange ws timerange ows other .
 
 AmericanDate : daterange -> month datesep day datesep year .
 GlobalDate : daterange -> year datesep month datesep day .

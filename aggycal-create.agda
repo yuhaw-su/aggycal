@@ -20,13 +20,6 @@ extract-addit-evt-info : other → 𝕃 addit-evt-info
 extract-addit-evt-info (Description d o) = (desc d) :: (extract-addit-evt-info o)
 extract-addit-evt-info OtherNil = []
 
-add-allday : 𝔹 → addit-evt-info
-add-allday b = allday b
-
-{- for all-day substitute -}
-midnight : aTime
-midnight = "00" , "00"
-
 adjust-time-with-ampm : time → aTime
 adjust-time-with-ampm (MilitaryTime hour min) = hour , min
 adjust-time-with-ampm (RegTime hour min ampm) with ampm
@@ -48,19 +41,19 @@ extract-datetimes dates times | GlobalDateRange y1 m1 d1 y2 m2 d2 with times
 ... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
 ... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
 
-strt-to-evt-info : strt → evt-info
-strt-to-evt-info (Strt name dates times addit-info) with extract-datetimes dates times
-... | sDT , eDT with times
-... | AllDayRange = evt name sDT eDT ((add-allday tt) :: (extract-addit-evt-info addit-info))
-... | (TimeRange x x₁) = evt name sDT eDT (extract-addit-evt-info addit-info)
+event-to-𝕃evt-info : event → 𝕃 evt-info
+event-to-𝕃evt-info (EventCons name start end other l) with extract-datetimes start end
+... | sDT , eDT = (evt name sDT eDT (extract-addit-evt-info other)) :: (event-to-𝕃evt-info l)
+event-to-𝕃evt-info (EventFinal name start end other) with extract-datetimes start end
+... | sDT , eDT = (evt name sDT eDT (extract-addit-evt-info other)) :: []
 
 process-strt : strt → string
-process-strt s =
+process-strt (Strt e) =
   "BEGIN:VCALENDAR\n" ^
   "PRODID:aggycal woot\n" ^
   "VERSION:2.0\n" ^
   "CALSCALE:GREGORIAN\n" ^
-  evt-info-to-string (strt-to-evt-info s) ^
+  𝕃evt-info-to-string (event-to-𝕃evt-info e) ^
   "END:VCALENDAR\n"
 
 process : Run → IO ⊤

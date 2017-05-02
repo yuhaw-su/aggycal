@@ -1,5 +1,5 @@
 Beginning processing of grammar aggycal.
-(Time elapsed: 0.001)
+(Time elapsed: 0.002)
 Converted grammar to AST for grammars.
 aggycal
 
@@ -12,7 +12,9 @@ strt
 Syntactic
 
 Posinfo : posinfo -> .
-Strt : strt -> ows words '\n' daterange ws timerange ows other ows .
+Strt : strt -> ows event ows .
+EventCons : event -> words '\n' daterange ws timerange ows other ows '\n' ows '\n' ows event .
+EventFinal : event -> words '\n' daterange ws timerange ows other .
 AmericanDate : daterange -> month datesep day datesep year .
 GlobalDate : daterange -> year datesep month datesep day .
 AmericanDateRange : daterange -> month datesep day datesep year ows sep ows month datesep day datesep year .
@@ -203,7 +205,7 @@ Rules
 
 
 Syntactic non-terminals (defined by syntactic productions):
-  whichm timerange time strt posinfo other daterange 
+  whichm timerange time strt posinfo other event daterange 
 
 Reading non-terminals (defined by lexical ->-productions):
   year words-range-25 words-plus-27 words-bar-26 words twodigit symbol-bar-9 symbol-bar-8 symbol-bar-7 symbol-bar-6 symbol-bar-5 symbol-bar-24 symbol-bar-23 symbol-bar-22 symbol-bar-21 symbol-bar-20 symbol-bar-19 symbol-bar-18 symbol-bar-17 symbol-bar-16 symbol-bar-15 symbol-bar-14 symbol-bar-13 symbol-bar-12 symbol-bar-11 symbol-bar-10 symbol month minute hour digit-range-28 digit day 
@@ -223,6 +225,8 @@ AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
 AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
 Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
+EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
+EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
 GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> daterange[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
@@ -393,7 +397,7 @@ P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows -> strt[Strt(x0, x1, x2, x3)]
+Strt:  #ows event[0] #ows -> strt[Strt(x0)]
 TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
@@ -414,6 +418,8 @@ AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
 AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
 Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
+EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
+EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
 GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> daterange[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
@@ -584,7 +590,7 @@ P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
-Strt:  #ows words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows -> strt[Strt(x0, x1, x2, x3)]
+Strt:  #ows event[0] #ows -> strt[Strt(x0)]
 TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
 )
 )
@@ -594,6 +600,8 @@ AllDayRange: AllDayRange . allday . x1 -> timerange(AllDayRange) . x1
 AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> daterange(AmericanDate(x0, x1, x2)) . x3
 AmericanDateRange: AmericanDateRange . month(x0) . datesep . day(x1) . datesep . year(x2) . ows . sep . ows . month(x3) . datesep . day(x4) . datesep . year(x5) . x6 -> daterange(AmericanDateRange(x0, x1, x2, x3, x4, x5)) . x6
 Description: Description . words(x0) . ws . other(x1) . x2 -> other(Description(x0, x1)) . x2
+EventCons: EventCons . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . ows . '\n' . ows . '\n' . ows . event(x4) . x5 -> event(EventCons(x0, x1, x2, x3, x4)) . x5
+EventFinal: EventFinal . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . x4 -> event(EventFinal(x0, x1, x2, x3)) . x4
 GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> daterange(GlobalDate(x0, x1, x2)) . x3
 GlobalDateRange: GlobalDateRange . year(x0) . datesep . month(x1) . datesep . day(x2) . ows . sep . ows . year(x3) . datesep . month(x4) . datesep . day(x5) . x6 -> daterange(GlobalDateRange(x0, x1, x2, x3, x4, x5)) . x6
 MilitaryTime: MilitaryTime . hour(x0) . ':' . minute(x1) . x2 -> time(MilitaryTime(x0, x1)) . x2
@@ -764,7 +772,7 @@ P99: P99 . 'l' . x1 -> words-range-25(string-append(0, char-to-string('l'))) . x
 PM: PM . pm . x1 -> whichm(PM) . x1
 Posinfo: Posinfo . x1 -> posinfo(Posinfo) . x1
 RegTime: RegTime . hour(x0) . ':' . minute(x1) . ows . whichm(x2) . x3 -> time(RegTime(x0, x1, x2)) . x3
-Strt: Strt . ows . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . ows . x4 -> strt(Strt(x0, x1, x2, x3)) . x4
+Strt: Strt . ows . event(x0) . ows . x1 -> strt(Strt(x0)) . x1
 TimeRange: TimeRange . time(x0) . ows . sep . ows . time(x1) . x2 -> timerange(TimeRange(x0, x1)) . x2
 )
 (No reorganizing critical pairs found.)

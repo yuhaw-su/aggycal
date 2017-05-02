@@ -12,20 +12,24 @@ aTime = hour × minute
 datetime : Set
 datetime = aDate × aTime
 
-{-aDateRange : Set
-aDateRange = aDate × aDate
-
-aTimeRange : Set
-aTimeRange = aTime × aTime-}
-
 data addit-evt-info : Set where    {- additional parameters -}
-  allday : 𝔹 → addit-evt-info
   desc   : words → addit-evt-info
 
+{- for all-day indication -}
+midnight : aTime
+midnight = "00" , "00"
+
+aDate-to-string : aDate → string
+aDate-to-string (y , m , d) = y ^ m ^ d
+
+aTime-to-string : aTime → string
+aTime-to-string (hour , min) = hour ^ min
+
+datetime-to-string : datetime → string
+datetime-to-string ((y , m , d) , (hour , min)) =
+  y ^ m ^ d ^ "T" ^ hour ^ min ^ "00"
+
 addit-evt-info-to-string : addit-evt-info → string
-addit-evt-info-to-string (allday yes) with yes
-... | tt = "All-day: YES"    {- need to fix -}
-... | ff = "All-day: NO"
 addit-evt-info-to-string (desc d) = "DESCRIPTION:" ^ d ^ "\n"
 
 addit-evt-info-list-to-string : 𝕃 addit-evt-info → string

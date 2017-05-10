@@ -1,0 +1,64 @@
+Both Thomas and Richard have done the ACE evaluation.
+
+What works, what doesn’t**************************************
+
+We managed to get basic events with names, dates, times, and descriptions working. We also managed to add some flexibility with how inputs are entered (i.e. all-day events). There were problems having the grammar parse multiple events, and we also had to refactor our code many times to handle the added parameters.
+
+How to test***************************************************
+
+To test our code, create a file with the following input:
+
+<event name>
+<date/date range with the format 01/23/45>
+<time range with the format 01:23 - 23:45 or Allday>
+<optional description>
+<new line>
+
+Then run the executable like so:
+
+./aggycal-create <inputfilename>
+
+This will output a .ics file with your event.
+
+Precomputed outputs*******************************************
+
+Given this input:
+
+Study for PLC Final Quiz!
+2017/05/01 - 2017/05/04
+Allday
+What is a rewrite???
+
+
+The output file will be:
+
+BEGIN:VCALENDAR
+PRODID:aggycal woot
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:Study for PLC Final Quiz!
+DTSTART;VALUE=DATE:20170501
+DTEND;VALUE=DATE:20170504
+DESCRIPTION:What is a rewrite???
+END:VEVENT
+END:VCALENDAR
+
+Critical code************************************************
+
+We have three main Agda files: aggycal-create.agda, evt-info.agda, and addit-evt-info.agda.
+
+aggycal-create.agda: This takes the parse tree from the parser and places it into an evt-info structure as well as an addit-evt-info structure. There is a fair amount of case-splitting based on what kind of input the user chose (i.e. Month/Date/Year vs. Year/Month/Date). We wrote several some helper functions located in the other files to avoid repeating confusing concatenations.
+
+evt-info.agda: This contains the eft-info structure, which has a name (string), a start date time (datetime, as specified by us), an end date time (datetime), and a list of addit-evt-info (also specified by us). The main function in this file is the one that converts the structure into the ICS format. There is also another function that converts a list of evt-info's into one long ICS string.
+
+addit-evt-info.agda: This contains the addit-evt-info structure, where we were planning to add all optional parameters. It also has some helpful <datatype>-to-string helper functions. The notable method here is the addit-evt-info-to-string function, which would be updated for each added parameter to return the ICS format of that specific parameter.
+
+Closing thoughts*******************************************
+
+Using Agda to do this created a lot of interesting challenges, but we also realized how flexible functional programming can be. Because the ICS format has literally 100+ pages of documentation, it would be a mammoth of a task to attempt to incorporate everything. However, we believe our project is a pretty good start in doing so.
+
+We had a great time tackling this project, and we also enjoyed the class very much. Thank you for instructing us this semester, and have a great summer!
+
+Sincerely,
+Thomas Han and Richard Su

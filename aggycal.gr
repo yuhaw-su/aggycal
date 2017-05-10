@@ -26,7 +26,7 @@ TimeRange : timerange -> time ows sep ows time .
 AllDayRange : timerange -> allday .
 
 OtherNil : other -> .
-Description : other -> words ws other .
+Description : other -> 'Description:' ows words ws other .
 
 Lexical
 

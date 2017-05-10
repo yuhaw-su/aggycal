@@ -1,5 +1,5 @@
 Beginning processing of grammar aggycal.
-(Time elapsed: 0.002)
+(Time elapsed: 0.)
 Converted grammar to AST for grammars.
 aggycal
 
@@ -26,7 +26,7 @@ MilitaryTime : time -> hour ':' minute .
 TimeRange : timerange -> time ows sep ows time .
 AllDayRange : timerange -> allday .
 OtherNil : other -> .
-Description : other -> words ws other .
+Description : other -> 'D' 'e' 's' 'c' 'r' 'i' 'p' 't' 'i' 'o' 'n' ':' ows words ws other .
 
 
 Lexical
@@ -224,7 +224,7 @@ AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
 AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
-Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
+Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ws other[1] -> other[Description(x0, x1)]
 EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
 EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
@@ -405,7 +405,7 @@ TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
 (Derivational complexity of the reorganizing TRS: O(n^0))
 (Local confluence of the reorganizing TRS: true)
 
-(Time elapsed: 0.014)
+(Time elapsed: 0.015)
 Found nullable (other, OtherNil)
 Found nullable (ows-star-4, P8)
 Found nullable (posinfo, Posinfo)
@@ -417,7 +417,7 @@ AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
 AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
 AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
-Description:  words[0] #ws other[1] -> other[Description(x0, x1)]
+Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ws other[1] -> other[Description(x0, x1)]
 EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
 EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
 GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
@@ -599,7 +599,7 @@ AM: AM . am . x1 -> whichm(AM) . x1
 AllDayRange: AllDayRange . allday . x1 -> timerange(AllDayRange) . x1
 AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> daterange(AmericanDate(x0, x1, x2)) . x3
 AmericanDateRange: AmericanDateRange . month(x0) . datesep . day(x1) . datesep . year(x2) . ows . sep . ows . month(x3) . datesep . day(x4) . datesep . year(x5) . x6 -> daterange(AmericanDateRange(x0, x1, x2, x3, x4, x5)) . x6
-Description: Description . words(x0) . ws . other(x1) . x2 -> other(Description(x0, x1)) . x2
+Description: Description . 'D' . 'e' . 's' . 'c' . 'r' . 'i' . 'p' . 't' . 'i' . 'o' . 'n' . ':' . ows . words(x0) . ws . other(x1) . x2 -> other(Description(x0, x1)) . x2
 EventCons: EventCons . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . ows . '\n' . ows . '\n' . ows . event(x4) . x5 -> event(EventCons(x0, x1, x2, x3, x4)) . x5
 EventFinal: EventFinal . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . x4 -> event(EventFinal(x0, x1, x2, x3)) . x4
 GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> daterange(GlobalDate(x0, x1, x2)) . x3

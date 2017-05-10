@@ -50,12 +50,16 @@ mutual
     GlobalDate : year → month → day → daterange
     GlobalDateRange : year → month → day → year → month → day → daterange
 
+  data event : Set where 
+    EventCons : words → daterange → timerange → other → event → event
+    EventFinal : words → daterange → timerange → other → event
+
   data other : Set where 
     Description : words → other → other
     OtherNil : other
 
   data strt : Set where 
-    Strt : words → daterange → timerange → other → strt
+    Strt : event → strt
 
   data time : Set where 
     MilitaryTime : hour → minute → time
@@ -73,6 +77,7 @@ mutual
 
 data ParseTreeT : Set where
   parsed-daterange : daterange → ParseTreeT
+  parsed-event : event → ParseTreeT
   parsed-other : other → ParseTreeT
   parsed-strt : strt → ParseTreeT
   parsed-time : time → ParseTreeT
@@ -217,12 +222,16 @@ mutual
   daterangeToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
   daterangeToString (GlobalDateRange x0 x1 x2 x3 x4 x5) = "(GlobalDateRange" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ " " ^ (yearToString x3) ^ " " ^ (monthToString x4) ^ " " ^ (dayToString x5) ^ ")"
 
+  eventToString : event → string
+  eventToString (EventCons x0 x1 x2 x3 x4) = "(EventCons" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ " " ^ (eventToString x4) ^ ")"
+  eventToString (EventFinal x0 x1 x2 x3) = "(EventFinal" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
+
   otherToString : other → string
   otherToString (Description x0 x1) = "(Description" ^ " " ^ (wordsToString x0) ^ " " ^ (otherToString x1) ^ ")"
   otherToString (OtherNil) = "OtherNil" ^ ""
 
   strtToString : strt → string
-  strtToString (Strt x0 x1 x2 x3) = "(Strt" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
+  strtToString (Strt x0) = "(Strt" ^ " " ^ (eventToString x0) ^ ")"
 
   timeToString : time → string
   timeToString (MilitaryTime x0 x1) = "(MilitaryTime" ^ " " ^ (hourToString x0) ^ " " ^ (minuteToString x1) ^ ")"
@@ -238,6 +247,7 @@ mutual
 
 ParseTreeToString : ParseTreeT → string
 ParseTreeToString (parsed-daterange t) = daterangeToString t
+ParseTreeToString (parsed-event t) = eventToString t
 ParseTreeToString (parsed-other t) = otherToString t
 ParseTreeToString (parsed-strt t) = strtToString t
 ParseTreeToString (parsed-time t) = timeToString t
@@ -331,6 +341,10 @@ mutual
   {-# TERMINATING #-}
   norm-other : (x : other) → other
   norm-other x = x
+
+  {-# TERMINATING #-}
+  norm-event : (x : event) → event
+  norm-event x = x
 
   {-# TERMINATING #-}
   norm-daterange : (x : daterange) → daterange

@@ -12,6 +12,7 @@ import qualified System.Environment
 import qualified System.FilePath
 import qualified System.IO
 import qualified Data.Text
+import qualified MAlonzo.Code.QaggycalZ45Ztypes
 import qualified MAlonzo.Code.Qlist
 import qualified MAlonzo.Code.Qproduct
 import qualified MAlonzo.Code.Qstring
@@ -24,14 +25,14 @@ name6 = "addit-evt-info.datetime"
 d6 = erased
 name8 = "addit-evt-info.addit-evt-info"
 d8 = ()
-newtype T8 a0 = C10 a0
-name12 = "addit-evt-info.midnight"
-d12
+data T8 a0 a1 = C10 a0 | C12 a0 a1
+name14 = "addit-evt-info.midnight"
+d14
   = coe
       MAlonzo.Code.Qproduct.C24 (coe Data.Text.pack "00")
       (coe Data.Text.pack "00")
-name14 = "addit-evt-info.aDate-to-string"
-d14 v0
+name16 = "addit-evt-info.aDate-to-string"
+d16 v0
   = case coe v0 of
       MAlonzo.Code.Qproduct.C24 v1 v2
         -> case coe v2 of
@@ -40,14 +41,14 @@ d14 v0
                     MAlonzo.Code.Qstring.d12 v1 (coe MAlonzo.Code.Qstring.d12 v3 v4)
              _ -> coe MAlonzo.RTE.mazUnreachableError
       _ -> coe MAlonzo.RTE.mazUnreachableError
-name22 = "addit-evt-info.aTime-to-string"
-d22 v0
+name24 = "addit-evt-info.aTime-to-string"
+d24 v0
   = case coe v0 of
       MAlonzo.Code.Qproduct.C24 v1 v2
         -> coe MAlonzo.Code.Qstring.d12 v1 v2
       _ -> coe MAlonzo.RTE.mazUnreachableError
-name28 = "addit-evt-info.datetime-to-string"
-d28 v0
+name30 = "addit-evt-info.datetime-to-string"
+d30 v0
   = case coe v0 of
       MAlonzo.Code.Qproduct.C24 v1 v2
         -> case coe v1 of
@@ -73,18 +74,45 @@ d28 v0
                     _ -> coe MAlonzo.RTE.mazUnreachableError
              _ -> coe MAlonzo.RTE.mazUnreachableError
       _ -> coe MAlonzo.RTE.mazUnreachableError
-name40 = "addit-evt-info.addit-evt-info-to-string"
-d40 v0
+name42 = "addit-evt-info.addit-evt-info-to-string"
+d42 v0
   = case coe v0 of
       C10 v1
         -> coe
              MAlonzo.Code.Qstring.d12 (coe Data.Text.pack "DESCRIPTION:")
              (coe MAlonzo.Code.Qstring.d12 v1 (coe Data.Text.pack "\n"))
+      C12 v1 v2
+        -> case coe v1 of
+             MAlonzo.Code.QaggycalZ45Ztypes.C100
+               -> coe
+                    MAlonzo.Code.Qstring.d12
+                    (coe Data.Text.pack "RRULE:FREQ=MONTHLY;UNTIL=")
+                    (coe
+                       MAlonzo.Code.Qstring.d12
+                       (coe d30 (coe MAlonzo.Code.Qproduct.C24 v2 d14))
+                       (coe Data.Text.pack "\n"))
+             MAlonzo.Code.QaggycalZ45Ztypes.C102
+               -> coe
+                    MAlonzo.Code.Qstring.d12
+                    (coe Data.Text.pack "RRULE:FREQ=WEEKLY;UNTIL=")
+                    (coe
+                       MAlonzo.Code.Qstring.d12
+                       (coe d30 (coe MAlonzo.Code.Qproduct.C24 v2 d14))
+                       (coe Data.Text.pack "\n"))
+             MAlonzo.Code.QaggycalZ45Ztypes.C104
+               -> coe
+                    MAlonzo.Code.Qstring.d12
+                    (coe Data.Text.pack "RRULE:FREQ=YEARLY;UNTIL=")
+                    (coe
+                       MAlonzo.Code.Qstring.d12
+                       (coe d30 (coe MAlonzo.Code.Qproduct.C24 v2 d14))
+                       (coe Data.Text.pack "\n"))
+             _ -> coe MAlonzo.RTE.mazUnreachableError
       _ -> coe MAlonzo.RTE.mazUnreachableError
-name44 = "addit-evt-info.addit-evt-info-list-to-string"
-d44 v0
+name66 = "addit-evt-info.addit-evt-info-list-to-string"
+d66 v0
   = case coe v0 of
       MAlonzo.Code.Qlist.C12 -> coe Data.Text.pack ""
       MAlonzo.Code.Qlist.C18 v1 v2
-        -> coe MAlonzo.Code.Qstring.d12 (coe d40 v1) (coe d44 v2)
+        -> coe MAlonzo.Code.Qstring.d12 (coe d42 v1) (coe d66 v2)
       _ -> coe MAlonzo.RTE.mazUnreachableError

@@ -14,6 +14,7 @@ datetime = aDate × aTime
 
 data addit-evt-info : Set where    {- additional parameters -}
   desc   : words → addit-evt-info
+  recur  : frequency → aDate → addit-evt-info
 
 {- for all-day indication -}
 midnight : aTime
@@ -31,6 +32,10 @@ datetime-to-string ((y , m , d) , (hour , min)) =
 
 addit-evt-info-to-string : addit-evt-info → string
 addit-evt-info-to-string (desc d) = "DESCRIPTION:" ^ d ^ "\n"
+addit-evt-info-to-string (recur f d) with f
+... | Monthly = "RRULE:FREQ=MONTHLY;UNTIL=" ^ (datetime-to-string (d , midnight)) ^ "\n"
+... | Weekly = "RRULE:FREQ=WEEKLY;UNTIL=" ^ (datetime-to-string (d , midnight)) ^ "\n"
+... | Yearly = "RRULE:FREQ=YEARLY;UNTIL=" ^ (datetime-to-string (d , midnight)) ^ "\n"
 
 addit-evt-info-list-to-string : 𝕃 addit-evt-info → string
 addit-evt-info-list-to-string [] = ""

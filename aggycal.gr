@@ -11,10 +11,11 @@ Strt : strt ->  ows event ows .
 EventCons : event -> words '\n' daterange ws timerange ows other ows '\n' ows '\n' ows event .
 EventFinal : event -> words '\n' daterange ws timerange ows other .
 
-AmericanDate : daterange -> month datesep day datesep year .
-GlobalDate : daterange -> year datesep month datesep day .
-AmericanDateRange : daterange -> month datesep day datesep year ows sep ows month datesep day datesep year .
-GlobalDateRange : daterange -> year datesep month datesep day ows sep ows year datesep month datesep day .
+AmericanDate : date -> month datesep day datesep year .
+GlobalDate : date -> year datesep month datesep day .
+
+DateRange : daterange -> date ows sep ows date .
+SingleDateRange : daterange -> date .
 
 PM : whichm -> pm .
 AM : whichm -> am .
@@ -25,13 +26,18 @@ MilitaryTime : time -> hour ':' minute .
 TimeRange : timerange -> time ows sep ows time .
 AllDayRange : timerange -> allday .
 
+Weekly : frequency -> weekly .
+Monthly : frequency -> monthly .
+Yearly : frequency -> yearly .
+
 OtherNil : other -> .
-Description : other -> 'Description:' ows words ws other .
+Description : other -> 'Description:' ows words ows '\n' other .
+Recurrence : other -> 'Repeat:' ows frequency space 'until' space date ows '\n' other .
 
 Lexical
 
 aws => ('\n' | '\t' | space ).
-ws => aws+.
+ws => aws+ .
 ows => aws* .
 
 symbol -> (space | '!' | '?' | '.' | ',' | '$' | '+' | '-' | '(' | ')' | '#' | '@' | ';' | '_' | '%' | '"' | quote | '‘' | '’' | '“' | '”') .
@@ -52,3 +58,7 @@ sep => ('to' | '-' ) .
 alldayA => ('all' | 'All' | 'ALL') .
 alldayD => ('day' | 'Day' | 'DAY') .
 allday => alldayA ows alldayD .
+
+weekly => ('weekly' | 'Weekly' | 'every' space 'week' | 'Every' space 'week') .
+monthly => ('monthly' | 'Monthly' | 'every' space 'month' | 'Every' space 'month') .
+yearly => ('yearly' | 'Yearly' | 'every' space 'year' | 'Every' space 'year') .

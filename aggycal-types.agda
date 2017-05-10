@@ -44,19 +44,27 @@ year = string
 
 mutual
 
+  data date : Set where 
+    AmericanDate : month → day → year → date
+    GlobalDate : year → month → day → date
+
   data daterange : Set where 
-    AmericanDate : month → day → year → daterange
-    AmericanDateRange : month → day → year → month → day → year → daterange
-    GlobalDate : year → month → day → daterange
-    GlobalDateRange : year → month → day → year → month → day → daterange
+    DateRange : date → date → daterange
+    SingleDateRange : date → daterange
 
   data event : Set where 
     EventCons : words → daterange → timerange → other → event → event
     EventFinal : words → daterange → timerange → other → event
 
+  data frequency : Set where 
+    Monthly : frequency
+    Weekly : frequency
+    Yearly : frequency
+
   data other : Set where 
     Description : words → other → other
     OtherNil : other
+    Recurrence : frequency → date → other → other
 
   data strt : Set where 
     Strt : event → strt
@@ -76,8 +84,10 @@ mutual
 -- embedded types:
 
 data ParseTreeT : Set where
+  parsed-date : date → ParseTreeT
   parsed-daterange : daterange → ParseTreeT
   parsed-event : event → ParseTreeT
+  parsed-frequency : frequency → ParseTreeT
   parsed-other : other → ParseTreeT
   parsed-strt : strt → ParseTreeT
   parsed-time : time → ParseTreeT
@@ -133,14 +143,26 @@ data ParseTreeT : Set where
   parsed-datesep-bar-29 : ParseTreeT
   parsed-datesep-bar-30 : ParseTreeT
   parsed-datesep-bar-31 : ParseTreeT
+  parsed-monthly : ParseTreeT
+  parsed-monthly-bar-42 : ParseTreeT
+  parsed-monthly-bar-43 : ParseTreeT
+  parsed-monthly-bar-44 : ParseTreeT
   parsed-ows : ParseTreeT
   parsed-ows-star-4 : ParseTreeT
   parsed-pm : ParseTreeT
   parsed-pm-bar-33 : ParseTreeT
   parsed-sep : ParseTreeT
   parsed-sep-bar-34 : ParseTreeT
+  parsed-weekly : ParseTreeT
+  parsed-weekly-bar-39 : ParseTreeT
+  parsed-weekly-bar-40 : ParseTreeT
+  parsed-weekly-bar-41 : ParseTreeT
   parsed-ws : ParseTreeT
   parsed-ws-plus-3 : ParseTreeT
+  parsed-yearly : ParseTreeT
+  parsed-yearly-bar-45 : ParseTreeT
+  parsed-yearly-bar-46 : ParseTreeT
+  parsed-yearly-bar-47 : ParseTreeT
 
 ------------------------------------------
 -- Parse tree printing functions
@@ -216,19 +238,27 @@ yearToString : year → string
 yearToString x = "(year " ^ x ^ ")"
 
 mutual
+  dateToString : date → string
+  dateToString (AmericanDate x0 x1 x2) = "(AmericanDate" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ ")"
+  dateToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
+
   daterangeToString : daterange → string
-  daterangeToString (AmericanDate x0 x1 x2) = "(AmericanDate" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ ")"
-  daterangeToString (AmericanDateRange x0 x1 x2 x3 x4 x5) = "(AmericanDateRange" ^ " " ^ (monthToString x0) ^ " " ^ (dayToString x1) ^ " " ^ (yearToString x2) ^ " " ^ (monthToString x3) ^ " " ^ (dayToString x4) ^ " " ^ (yearToString x5) ^ ")"
-  daterangeToString (GlobalDate x0 x1 x2) = "(GlobalDate" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ ")"
-  daterangeToString (GlobalDateRange x0 x1 x2 x3 x4 x5) = "(GlobalDateRange" ^ " " ^ (yearToString x0) ^ " " ^ (monthToString x1) ^ " " ^ (dayToString x2) ^ " " ^ (yearToString x3) ^ " " ^ (monthToString x4) ^ " " ^ (dayToString x5) ^ ")"
+  daterangeToString (DateRange x0 x1) = "(DateRange" ^ " " ^ (dateToString x0) ^ " " ^ (dateToString x1) ^ ")"
+  daterangeToString (SingleDateRange x0) = "(SingleDateRange" ^ " " ^ (dateToString x0) ^ ")"
 
   eventToString : event → string
   eventToString (EventCons x0 x1 x2 x3 x4) = "(EventCons" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ " " ^ (eventToString x4) ^ ")"
   eventToString (EventFinal x0 x1 x2 x3) = "(EventFinal" ^ " " ^ (wordsToString x0) ^ " " ^ (daterangeToString x1) ^ " " ^ (timerangeToString x2) ^ " " ^ (otherToString x3) ^ ")"
 
+  frequencyToString : frequency → string
+  frequencyToString (Monthly) = "Monthly" ^ ""
+  frequencyToString (Weekly) = "Weekly" ^ ""
+  frequencyToString (Yearly) = "Yearly" ^ ""
+
   otherToString : other → string
   otherToString (Description x0 x1) = "(Description" ^ " " ^ (wordsToString x0) ^ " " ^ (otherToString x1) ^ ")"
   otherToString (OtherNil) = "OtherNil" ^ ""
+  otherToString (Recurrence x0 x1 x2) = "(Recurrence" ^ " " ^ (frequencyToString x0) ^ " " ^ (dateToString x1) ^ " " ^ (otherToString x2) ^ ")"
 
   strtToString : strt → string
   strtToString (Strt x0) = "(Strt" ^ " " ^ (eventToString x0) ^ ")"
@@ -246,8 +276,10 @@ mutual
   whichmToString (PM) = "PM" ^ ""
 
 ParseTreeToString : ParseTreeT → string
+ParseTreeToString (parsed-date t) = dateToString t
 ParseTreeToString (parsed-daterange t) = daterangeToString t
 ParseTreeToString (parsed-event t) = eventToString t
+ParseTreeToString (parsed-frequency t) = frequencyToString t
 ParseTreeToString (parsed-other t) = otherToString t
 ParseTreeToString (parsed-strt t) = strtToString t
 ParseTreeToString (parsed-time t) = timeToString t
@@ -303,14 +335,26 @@ ParseTreeToString parsed-datesep = "[datesep]"
 ParseTreeToString parsed-datesep-bar-29 = "[datesep-bar-29]"
 ParseTreeToString parsed-datesep-bar-30 = "[datesep-bar-30]"
 ParseTreeToString parsed-datesep-bar-31 = "[datesep-bar-31]"
+ParseTreeToString parsed-monthly = "[monthly]"
+ParseTreeToString parsed-monthly-bar-42 = "[monthly-bar-42]"
+ParseTreeToString parsed-monthly-bar-43 = "[monthly-bar-43]"
+ParseTreeToString parsed-monthly-bar-44 = "[monthly-bar-44]"
 ParseTreeToString parsed-ows = "[ows]"
 ParseTreeToString parsed-ows-star-4 = "[ows-star-4]"
 ParseTreeToString parsed-pm = "[pm]"
 ParseTreeToString parsed-pm-bar-33 = "[pm-bar-33]"
 ParseTreeToString parsed-sep = "[sep]"
 ParseTreeToString parsed-sep-bar-34 = "[sep-bar-34]"
+ParseTreeToString parsed-weekly = "[weekly]"
+ParseTreeToString parsed-weekly-bar-39 = "[weekly-bar-39]"
+ParseTreeToString parsed-weekly-bar-40 = "[weekly-bar-40]"
+ParseTreeToString parsed-weekly-bar-41 = "[weekly-bar-41]"
 ParseTreeToString parsed-ws = "[ws]"
 ParseTreeToString parsed-ws-plus-3 = "[ws-plus-3]"
+ParseTreeToString parsed-yearly = "[yearly]"
+ParseTreeToString parsed-yearly-bar-45 = "[yearly-bar-45]"
+ParseTreeToString parsed-yearly-bar-46 = "[yearly-bar-46]"
+ParseTreeToString parsed-yearly-bar-47 = "[yearly-bar-47]"
 
 ------------------------------------------
 -- Reorganizing rules
@@ -343,12 +387,20 @@ mutual
   norm-other x = x
 
   {-# TERMINATING #-}
+  norm-frequency : (x : frequency) → frequency
+  norm-frequency x = x
+
+  {-# TERMINATING #-}
   norm-event : (x : event) → event
   norm-event x = x
 
   {-# TERMINATING #-}
   norm-daterange : (x : daterange) → daterange
   norm-daterange x = x
+
+  {-# TERMINATING #-}
+  norm-date : (x : date) → date
+  norm-date x = x
 
 isParseTree : ParseTreeT → 𝕃 char → string → Set
 isParseTree p l s = ⊤ {- this will be ignored since we are using simply typed runs -}

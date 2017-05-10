@@ -17,8 +17,11 @@ open import evt-info
 open import addit-evt-info
 
 extract-addit-evt-info : other → 𝕃 addit-evt-info
-extract-addit-evt-info (Description d o) = (desc d) :: (extract-addit-evt-info o)
 extract-addit-evt-info OtherNil = []
+extract-addit-evt-info (Description d o) = (desc d) :: (extract-addit-evt-info o)
+extract-addit-evt-info (Recurrence freq eDate o) with eDate
+... | AmericanDate m d y = (recur freq (y , m , d)) :: (extract-addit-evt-info o)
+... | GlobalDate y m d = (recur freq (y , m , d)) :: (extract-addit-evt-info o)
 
 adjust-time-with-ampm : time → aTime
 adjust-time-with-ampm (MilitaryTime hour min) = hour , min
@@ -28,18 +31,26 @@ adjust-time-with-ampm (RegTime hour min ampm) with ampm
 
 extract-datetimes : daterange → timerange → datetime × datetime
 extract-datetimes dates times with dates
-extract-datetimes dates times | AmericanDate m d y with times
-... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
-... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
-extract-datetimes dates times | AmericanDateRange m1 d1 y1 m2 d2 y2 with times
+extract-datetimes dates times | DateRange sDate eDate with (sDate , eDate)
+extract-datetimes dates times | DateRange sDate eDate | (AmericanDate m1 d1 y1 , AmericanDate m2 d2 y2) with times
 ... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
 ... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
-extract-datetimes dates times | GlobalDate y m d with times
-... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
-... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
-extract-datetimes dates times | GlobalDateRange y1 m1 d1 y2 m2 d2 with times
+extract-datetimes dates times | DateRange sDate eDate | (GlobalDate y1 m1 d1 , GlobalDate y2 m2 d2) with times
 ... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
 ... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | DateRange sDate eDate | (AmericanDate m1 d1 y1 , GlobalDate y2 m2 d2) with times
+... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
+... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | DateRange sDate eDate | (GlobalDate y1 m1 d1 , AmericanDate m2 d2 y2) with times
+... | AllDayRange = ((y1 , m1 , d1) , midnight) , ((y2 , m2 , d2) , midnight)
+... | (TimeRange sTime eTime) = ((y1 , m1 , d1) , adjust-time-with-ampm sTime) , ((y2 , m2 , d2) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | SingleDateRange sDate with sDate
+extract-datetimes dates times | SingleDateRange sDate | (AmericanDate m d y) with times
+... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
+... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
+extract-datetimes dates times | SingleDateRange sDate | (GlobalDate y m d) with times
+... | AllDayRange = ((y , m , d) , midnight) , ((y , m , d) , midnight)
+... | (TimeRange sTime eTime) = ((y , m , d) , adjust-time-with-ampm sTime) , ((y , m , d) , adjust-time-with-ampm eTime)
 
 event-to-𝕃evt-info : event → 𝕃 evt-info
 event-to-𝕃evt-info (EventCons name start end other l) with extract-datetimes start end

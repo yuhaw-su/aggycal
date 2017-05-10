@@ -2,7 +2,7 @@ Both Thomas and Richard have done the ACE evaluation.
 
 What works, what doesn’t**************************************
 
-We managed to get basic events with names, dates, times, and descriptions working. We also managed to add some flexibility with how inputs are entered (i.e. all-day events). There were problems having the grammar parse multiple events, and we also had to refactor our code many times to handle the added parameters.
+We managed to get basic events with names, dates, times, descriptions, and recurrences working. We also managed to add some flexibility with how inputs are entered (i.e. all-day events, regular time and military time, etc.). There were problems having the grammar parse multiple events, and we also had to refactor our code many times to handle the added parameters.
 
 How to test***************************************************
 
@@ -10,8 +10,9 @@ To test our code, create a file with the following input:
 
 <event name>
 <date/date range with the format 01/23/45>
-<time range with the format 01:23 - 23:45 or Allday>
-<optional description>
+<time range with the format 01:23 - 23:45, 01:23am - 12:45pm, or Allday>
+<optional description beginning with ‘Description:’>
+<optional recurrence rule like so: ‘Repeat: <weekly/monthly/yearly> until <date>’>
 <new line>
 
 Then run the executable like so:
@@ -44,21 +45,46 @@ DESCRIPTION:What is a rewrite???
 END:VEVENT
 END:VCALENDAR
 
+Given this input:
+
+Hey this is a cool weekly event
+05/11/2017
+02:30am - 04:40pm
+Description: Please god work
+Repeat: every week until 2017/06/30
+
+
+The output file will be:
+
+BEGIN:VCALENDAR
+PRODID:aggycal woot
+VERSION:2.0
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+SUMMARY:Hey this is a cool weekly event
+DTSTART:20170511T023000
+DTEND:20170511T164000
+DESCRIPTION:Please god work
+RRULE:FREQ=WEEKLY;UNTIL=20170630T000000
+END:VEVENT
+END:VCALENDAR
+
+
 Critical code************************************************
 
 We have three main Agda files: aggycal-create.agda, evt-info.agda, and addit-evt-info.agda.
 
 aggycal-create.agda: This takes the parse tree from the parser and places it into an evt-info structure as well as an addit-evt-info structure. There is a fair amount of case-splitting based on what kind of input the user chose (i.e. Month/Date/Year vs. Year/Month/Date). We wrote several some helper functions located in the other files to avoid repeating confusing concatenations.
 
-evt-info.agda: This contains the eft-info structure, which has a name (string), a start date time (datetime, as specified by us), an end date time (datetime), and a list of addit-evt-info (also specified by us). The main function in this file is the one that converts the structure into the ICS format. There is also another function that converts a list of evt-info's into one long ICS string.
+evt-info.agda: This contains the evt-info structure, which has a name (string), a start date time (datetime, as specified by us), an end date time (datetime), and a list of addit-evt-info (also specified by us). The main function in this file is the one that converts the structure into the ICS format. There is also another function that converts a list of evt-info's into one long ICS string.
 
 addit-evt-info.agda: This contains the addit-evt-info structure, where we were planning to add all optional parameters. It also has some helpful <datatype>-to-string helper functions. The notable method here is the addit-evt-info-to-string function, which would be updated for each added parameter to return the ICS format of that specific parameter.
 
 Closing thoughts*******************************************
 
-Using Agda to do this created a lot of interesting challenges, but we also realized how flexible functional programming can be. Because the ICS format has literally 100+ pages of documentation, it would be a mammoth of a task to attempt to incorporate everything. However, we believe our project is a pretty good start in doing so.
+Using Agda to do this created a lot of interesting challenges, but we also realized how flexible functional programming can be. Because the ICS format has literally 100+ pages of documentation, it would be a mammoth of a task to attempt to incorporate everything. However, we believe our project is a pretty good start in doing so. Overall, one of the greatest takeaways for us is to spend more time designing the entities and their relations BEFORE executing. We wasted so much time refactoring code to better suit added parameters; had we optimized early, we would have had time to add more.
 
-We had a great time tackling this project, and we also enjoyed the class very much. Thank you for instructing us this semester, and have a great summer!
+Nonetheless, we had a great time tackling this project, and we also enjoyed the class very much. Thank you for instructing us this semester, and have a great summer!
 
 Sincerely,
 Thomas Han and Richard Su

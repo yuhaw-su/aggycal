@@ -1,5 +1,5 @@
 Beginning processing of grammar aggycal.
-(Time elapsed: 0.)
+(Time elapsed: 0.001)
 Converted grammar to AST for grammars.
 aggycal
 
@@ -15,18 +15,22 @@ Posinfo : posinfo -> .
 Strt : strt -> ows event ows .
 EventCons : event -> words '\n' daterange ws timerange ows other ows '\n' ows '\n' ows event .
 EventFinal : event -> words '\n' daterange ws timerange ows other .
-AmericanDate : daterange -> month datesep day datesep year .
-GlobalDate : daterange -> year datesep month datesep day .
-AmericanDateRange : daterange -> month datesep day datesep year ows sep ows month datesep day datesep year .
-GlobalDateRange : daterange -> year datesep month datesep day ows sep ows year datesep month datesep day .
+AmericanDate : date -> month datesep day datesep year .
+GlobalDate : date -> year datesep month datesep day .
+DateRange : daterange -> date ows sep ows date .
+SingleDateRange : daterange -> date .
 PM : whichm -> pm .
 AM : whichm -> am .
 RegTime : time -> hour ':' minute ows whichm .
 MilitaryTime : time -> hour ':' minute .
 TimeRange : timerange -> time ows sep ows time .
 AllDayRange : timerange -> allday .
+Weekly : frequency -> weekly .
+Monthly : frequency -> monthly .
+Yearly : frequency -> yearly .
 OtherNil : other -> .
-Description : other -> 'D' 'e' 's' 'c' 'r' 'i' 'p' 't' 'i' 'o' 'n' ':' ows words ws other .
+Description : other -> 'D' 'e' 's' 'c' 'r' 'i' 'p' 't' 'i' 'o' 'n' ':' ows words ows '\n' other .
+Recurrence : other -> 'R' 'e' 'p' 'e' 'a' 't' ':' ows frequency ' ' 'u' 'n' 't' 'i' 'l' ' ' date ows '\n' other .
 
 
 Lexical
@@ -194,6 +198,27 @@ alldayD-bar-38 => 'd' 'a' 'y' .
 alldayD-bar-38 => alldayD-bar-37 .
 alldayD => alldayD-bar-38 .
 allday => alldayA ows alldayD .
+weekly-bar-39 => 'e' 'v' 'e' 'r' 'y' ' ' 'w' 'e' 'e' 'k' .
+weekly-bar-39 => 'E' 'v' 'e' 'r' 'y' ' ' 'w' 'e' 'e' 'k' .
+weekly-bar-40 => 'W' 'e' 'e' 'k' 'l' 'y' .
+weekly-bar-40 => weekly-bar-39 .
+weekly-bar-41 => 'w' 'e' 'e' 'k' 'l' 'y' .
+weekly-bar-41 => weekly-bar-40 .
+weekly => weekly-bar-41 .
+monthly-bar-42 => 'e' 'v' 'e' 'r' 'y' ' ' 'm' 'o' 'n' 't' 'h' .
+monthly-bar-42 => 'E' 'v' 'e' 'r' 'y' ' ' 'm' 'o' 'n' 't' 'h' .
+monthly-bar-43 => 'M' 'o' 'n' 't' 'h' 'l' 'y' .
+monthly-bar-43 => monthly-bar-42 .
+monthly-bar-44 => 'm' 'o' 'n' 't' 'h' 'l' 'y' .
+monthly-bar-44 => monthly-bar-43 .
+monthly => monthly-bar-44 .
+yearly-bar-45 => 'e' 'v' 'e' 'r' 'y' ' ' 'y' 'e' 'a' 'r' .
+yearly-bar-45 => 'E' 'v' 'e' 'r' 'y' ' ' 'y' 'e' 'a' 'r' .
+yearly-bar-46 => 'Y' 'e' 'a' 'r' 'l' 'y' .
+yearly-bar-46 => yearly-bar-45 .
+yearly-bar-47 => 'y' 'e' 'a' 'r' 'l' 'y' .
+yearly-bar-47 => yearly-bar-46 .
+yearly => yearly-bar-47 .
 
 
 Vars
@@ -205,13 +230,13 @@ Rules
 
 
 Syntactic non-terminals (defined by syntactic productions):
-  whichm timerange time strt posinfo other event daterange 
+  whichm timerange time strt posinfo other frequency event daterange date 
 
 Reading non-terminals (defined by lexical ->-productions):
   year words-range-25 words-plus-27 words-bar-26 words twodigit symbol-bar-9 symbol-bar-8 symbol-bar-7 symbol-bar-6 symbol-bar-5 symbol-bar-24 symbol-bar-23 symbol-bar-22 symbol-bar-21 symbol-bar-20 symbol-bar-19 symbol-bar-18 symbol-bar-17 symbol-bar-16 symbol-bar-15 symbol-bar-14 symbol-bar-13 symbol-bar-12 symbol-bar-11 symbol-bar-10 symbol month minute hour digit-range-28 digit day 
 
 Recognizing non-terminals (defined by lexical =>-productions):
-  ws-plus-3 ws sep-bar-34 sep pm-bar-33 pm ows-star-4 ows datesep-bar-31 datesep-bar-30 datesep-bar-29 datesep aws-bar-2 aws-bar-1 aws am-bar-32 am alldayD-bar-38 alldayD-bar-37 alldayD alldayA-bar-36 alldayA-bar-35 alldayA allday 
+  yearly-bar-47 yearly-bar-46 yearly-bar-45 yearly ws-plus-3 ws weekly-bar-41 weekly-bar-40 weekly-bar-39 weekly sep-bar-34 sep pm-bar-33 pm ows-star-4 ows monthly-bar-44 monthly-bar-43 monthly-bar-42 monthly datesep-bar-31 datesep-bar-30 datesep-bar-29 datesep aws-bar-2 aws-bar-1 aws am-bar-32 am alldayD-bar-38 alldayD-bar-37 alldayD alldayA-bar-36 alldayA-bar-35 alldayA allday 
 
 Terminal symbols:
   '”' '“' '’' '‘' 'z' 'y' 'x' 'w' 'v' 'u' 't' 's' 'r' 'q' 'p' 'o' 'n' 'm' 'l' 'k' 'j' 'i' 'h' 'g' 'f' 'e' 'd' 'c' 'b' 'a' '_' '\t' '\n' '\'' 'Z' 'Y' 'X' 'W' 'V' 'U' 'T' 'S' 'R' 'Q' 'P' 'O' 'N' 'M' 'L' 'K' 'J' 'I' 'H' 'G' 'F' 'E' 'D' 'C' 'B' 'A' '@' '?' ';' ':' '9' '8' '7' '6' '5' '4' '3' '2' '1' '0' '/' '.' '-' ',' '+' ')' '(' '%' '$' '#' '"' '!' ' ' 
@@ -222,14 +247,14 @@ Terminal symbols:
 (
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
-AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
-AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
-Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ws other[1] -> other[Description(x0, x1)]
+AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
+DateRange:  date[0] #ows #sep #ows date[1] -> daterange[DateRange(x0, x1)]
+Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ows #'\n' other[1] -> other[Description(x0, x1)]
 EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
 EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
-GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
-GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> daterange[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
+GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
+Monthly:  #monthly -> frequency[Monthly]
 OtherNil:  -> other[OtherNil]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
@@ -303,8 +328,29 @@ P16:  symbol-bar-6[0] -> symbol-bar-7[string-append(0, x0)]
 P160:  #alldayD-bar-37 -> alldayD-bar-38[]
 P161:  #alldayD-bar-38 -> alldayD[]
 P162:  #alldayA #ows #alldayD -> allday[]
+P163:  #'e' #'v' #'e' #'r' #'y' #' ' #'w' #'e' #'e' #'k' -> weekly-bar-39[]
+P164:  #'E' #'v' #'e' #'r' #'y' #' ' #'w' #'e' #'e' #'k' -> weekly-bar-39[]
+P165:  #'W' #'e' #'e' #'k' #'l' #'y' -> weekly-bar-40[]
+P166:  #weekly-bar-39 -> weekly-bar-40[]
+P167:  #'w' #'e' #'e' #'k' #'l' #'y' -> weekly-bar-41[]
+P168:  #weekly-bar-40 -> weekly-bar-41[]
+P169:  #weekly-bar-41 -> weekly[]
 P17:  '\'' -> symbol-bar-8[string-append(0, char-to-string('\''))]
+P170:  #'e' #'v' #'e' #'r' #'y' #' ' #'m' #'o' #'n' #'t' #'h' -> monthly-bar-42[]
+P171:  #'E' #'v' #'e' #'r' #'y' #' ' #'m' #'o' #'n' #'t' #'h' -> monthly-bar-42[]
+P172:  #'M' #'o' #'n' #'t' #'h' #'l' #'y' -> monthly-bar-43[]
+P173:  #monthly-bar-42 -> monthly-bar-43[]
+P174:  #'m' #'o' #'n' #'t' #'h' #'l' #'y' -> monthly-bar-44[]
+P175:  #monthly-bar-43 -> monthly-bar-44[]
+P176:  #monthly-bar-44 -> monthly[]
+P177:  #'e' #'v' #'e' #'r' #'y' #' ' #'y' #'e' #'a' #'r' -> yearly-bar-45[]
+P178:  #'E' #'v' #'e' #'r' #'y' #' ' #'y' #'e' #'a' #'r' -> yearly-bar-45[]
+P179:  #'Y' #'e' #'a' #'r' #'l' #'y' -> yearly-bar-46[]
 P18:  symbol-bar-7[0] -> symbol-bar-8[string-append(0, x0)]
+P180:  #yearly-bar-45 -> yearly-bar-46[]
+P181:  #'y' #'e' #'a' #'r' #'l' #'y' -> yearly-bar-47[]
+P182:  #yearly-bar-46 -> yearly-bar-47[]
+P183:  #yearly-bar-47 -> yearly[]
 P19:  '"' -> symbol-bar-9[string-append(0, char-to-string('"'))]
 P2:  #'\n' -> aws-bar-2[]
 P20:  symbol-bar-8[0] -> symbol-bar-9[string-append(0, x0)]
@@ -396,16 +442,20 @@ P98:  'k' -> words-range-25[string-append(0, char-to-string('k'))]
 P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
+Recurrence:  #'R' #'e' #'p' #'e' #'a' #'t' #':' #ows frequency[0] #' ' #'u' #'n' #'t' #'i' #'l' #' ' date[1] #ows #'\n' other[2] -> other[Recurrence(x0, x1, x2)]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
+SingleDateRange:  date[0] -> daterange[SingleDateRange(x0)]
 Strt:  #ows event[0] #ows -> strt[Strt(x0)]
 TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
+Weekly:  #weekly -> frequency[Weekly]
+Yearly:  #yearly -> frequency[Yearly]
 )
 )
 (The reorganizing TRS is terminating.)
 (Derivational complexity of the reorganizing TRS: O(n^0))
 (Local confluence of the reorganizing TRS: true)
 
-(Time elapsed: 0.015)
+(Time elapsed: 0.018)
 Found nullable (other, OtherNil)
 Found nullable (ows-star-4, P8)
 Found nullable (posinfo, Posinfo)
@@ -415,14 +465,14 @@ Found nullable (ows, P10)
 (
 AM:  #am -> whichm[AM]
 AllDayRange:  #allday -> timerange[AllDayRange]
-AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> daterange[AmericanDate(x0, x1, x2)]
-AmericanDateRange:  month[0] #datesep day[1] #datesep year[2] #ows #sep #ows month[3] #datesep day[4] #datesep year[5] -> daterange[AmericanDateRange(x0, x1, x2, x3, x4, x5)]
-Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ws other[1] -> other[Description(x0, x1)]
+AmericanDate:  month[0] #datesep day[1] #datesep year[2] -> date[AmericanDate(x0, x1, x2)]
+DateRange:  date[0] #ows #sep #ows date[1] -> daterange[DateRange(x0, x1)]
+Description:  #'D' #'e' #'s' #'c' #'r' #'i' #'p' #'t' #'i' #'o' #'n' #':' #ows words[0] #ows #'\n' other[1] -> other[Description(x0, x1)]
 EventCons:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] #ows #'\n' #ows #'\n' #ows event[4] -> event[EventCons(x0, x1, x2, x3, x4)]
 EventFinal:  words[0] #'\n' daterange[1] #ws timerange[2] #ows other[3] -> event[EventFinal(x0, x1, x2, x3)]
-GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> daterange[GlobalDate(x0, x1, x2)]
-GlobalDateRange:  year[0] #datesep month[1] #datesep day[2] #ows #sep #ows year[3] #datesep month[4] #datesep day[5] -> daterange[GlobalDateRange(x0, x1, x2, x3, x4, x5)]
+GlobalDate:  year[0] #datesep month[1] #datesep day[2] -> date[GlobalDate(x0, x1, x2)]
 MilitaryTime:  hour[0] #':' minute[1] -> time[MilitaryTime(x0, x1)]
+Monthly:  #monthly -> frequency[Monthly]
 OtherNil:  -> other[OtherNil]
 P0:  #'\t' -> aws-bar-1[]
 P1:  #' ' -> aws-bar-1[]
@@ -496,8 +546,29 @@ P16:  symbol-bar-6[0] -> symbol-bar-7[string-append(0, x0)]
 P160:  #alldayD-bar-37 -> alldayD-bar-38[]
 P161:  #alldayD-bar-38 -> alldayD[]
 P162:  #alldayA #ows #alldayD -> allday[]
+P163:  #'e' #'v' #'e' #'r' #'y' #' ' #'w' #'e' #'e' #'k' -> weekly-bar-39[]
+P164:  #'E' #'v' #'e' #'r' #'y' #' ' #'w' #'e' #'e' #'k' -> weekly-bar-39[]
+P165:  #'W' #'e' #'e' #'k' #'l' #'y' -> weekly-bar-40[]
+P166:  #weekly-bar-39 -> weekly-bar-40[]
+P167:  #'w' #'e' #'e' #'k' #'l' #'y' -> weekly-bar-41[]
+P168:  #weekly-bar-40 -> weekly-bar-41[]
+P169:  #weekly-bar-41 -> weekly[]
 P17:  '\'' -> symbol-bar-8[string-append(0, char-to-string('\''))]
+P170:  #'e' #'v' #'e' #'r' #'y' #' ' #'m' #'o' #'n' #'t' #'h' -> monthly-bar-42[]
+P171:  #'E' #'v' #'e' #'r' #'y' #' ' #'m' #'o' #'n' #'t' #'h' -> monthly-bar-42[]
+P172:  #'M' #'o' #'n' #'t' #'h' #'l' #'y' -> monthly-bar-43[]
+P173:  #monthly-bar-42 -> monthly-bar-43[]
+P174:  #'m' #'o' #'n' #'t' #'h' #'l' #'y' -> monthly-bar-44[]
+P175:  #monthly-bar-43 -> monthly-bar-44[]
+P176:  #monthly-bar-44 -> monthly[]
+P177:  #'e' #'v' #'e' #'r' #'y' #' ' #'y' #'e' #'a' #'r' -> yearly-bar-45[]
+P178:  #'E' #'v' #'e' #'r' #'y' #' ' #'y' #'e' #'a' #'r' -> yearly-bar-45[]
+P179:  #'Y' #'e' #'a' #'r' #'l' #'y' -> yearly-bar-46[]
 P18:  symbol-bar-7[0] -> symbol-bar-8[string-append(0, x0)]
+P180:  #yearly-bar-45 -> yearly-bar-46[]
+P181:  #'y' #'e' #'a' #'r' #'l' #'y' -> yearly-bar-47[]
+P182:  #yearly-bar-46 -> yearly-bar-47[]
+P183:  #yearly-bar-47 -> yearly[]
 P19:  '"' -> symbol-bar-9[string-append(0, char-to-string('"'))]
 P2:  #'\n' -> aws-bar-2[]
 P20:  symbol-bar-8[0] -> symbol-bar-9[string-append(0, x0)]
@@ -589,22 +660,26 @@ P98:  'k' -> words-range-25[string-append(0, char-to-string('k'))]
 P99:  'l' -> words-range-25[string-append(0, char-to-string('l'))]
 PM:  #pm -> whichm[PM]
 Posinfo:  -> posinfo[Posinfo]
+Recurrence:  #'R' #'e' #'p' #'e' #'a' #'t' #':' #ows frequency[0] #' ' #'u' #'n' #'t' #'i' #'l' #' ' date[1] #ows #'\n' other[2] -> other[Recurrence(x0, x1, x2)]
 RegTime:  hour[0] #':' minute[1] #ows whichm[2] -> time[RegTime(x0, x1, x2)]
+SingleDateRange:  date[0] -> daterange[SingleDateRange(x0)]
 Strt:  #ows event[0] #ows -> strt[Strt(x0)]
 TimeRange:  time[0] #ows #sep #ows time[1] -> timerange[TimeRange(x0, x1)]
+Weekly:  #weekly -> frequency[Weekly]
+Yearly:  #yearly -> frequency[Yearly]
 )
 )
 (The TRS corresponding to the final parsing TRS:
 AM: AM . am . x1 -> whichm(AM) . x1
 AllDayRange: AllDayRange . allday . x1 -> timerange(AllDayRange) . x1
-AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> daterange(AmericanDate(x0, x1, x2)) . x3
-AmericanDateRange: AmericanDateRange . month(x0) . datesep . day(x1) . datesep . year(x2) . ows . sep . ows . month(x3) . datesep . day(x4) . datesep . year(x5) . x6 -> daterange(AmericanDateRange(x0, x1, x2, x3, x4, x5)) . x6
-Description: Description . 'D' . 'e' . 's' . 'c' . 'r' . 'i' . 'p' . 't' . 'i' . 'o' . 'n' . ':' . ows . words(x0) . ws . other(x1) . x2 -> other(Description(x0, x1)) . x2
+AmericanDate: AmericanDate . month(x0) . datesep . day(x1) . datesep . year(x2) . x3 -> date(AmericanDate(x0, x1, x2)) . x3
+DateRange: DateRange . date(x0) . ows . sep . ows . date(x1) . x2 -> daterange(DateRange(x0, x1)) . x2
+Description: Description . 'D' . 'e' . 's' . 'c' . 'r' . 'i' . 'p' . 't' . 'i' . 'o' . 'n' . ':' . ows . words(x0) . ows . '\n' . other(x1) . x2 -> other(Description(x0, x1)) . x2
 EventCons: EventCons . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . ows . '\n' . ows . '\n' . ows . event(x4) . x5 -> event(EventCons(x0, x1, x2, x3, x4)) . x5
 EventFinal: EventFinal . words(x0) . '\n' . daterange(x1) . ws . timerange(x2) . ows . other(x3) . x4 -> event(EventFinal(x0, x1, x2, x3)) . x4
-GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> daterange(GlobalDate(x0, x1, x2)) . x3
-GlobalDateRange: GlobalDateRange . year(x0) . datesep . month(x1) . datesep . day(x2) . ows . sep . ows . year(x3) . datesep . month(x4) . datesep . day(x5) . x6 -> daterange(GlobalDateRange(x0, x1, x2, x3, x4, x5)) . x6
+GlobalDate: GlobalDate . year(x0) . datesep . month(x1) . datesep . day(x2) . x3 -> date(GlobalDate(x0, x1, x2)) . x3
 MilitaryTime: MilitaryTime . hour(x0) . ':' . minute(x1) . x2 -> time(MilitaryTime(x0, x1)) . x2
+Monthly: Monthly . monthly . x1 -> frequency(Monthly) . x1
 OtherNil: OtherNil . x1 -> other(OtherNil) . x1
 P0: P0 . '\t' . x1 -> aws-bar-1 . x1
 P1: P1 . ' ' . x1 -> aws-bar-1 . x1
@@ -678,8 +753,29 @@ P16: P16 . symbol-bar-6(x0) . x1 -> symbol-bar-7(string-append(0, x0)) . x1
 P160: P160 . alldayD-bar-37 . x1 -> alldayD-bar-38 . x1
 P161: P161 . alldayD-bar-38 . x1 -> alldayD . x1
 P162: P162 . alldayA . ows . alldayD . x1 -> allday . x1
+P163: P163 . 'e' . 'v' . 'e' . 'r' . 'y' . ' ' . 'w' . 'e' . 'e' . 'k' . x1 -> weekly-bar-39 . x1
+P164: P164 . 'E' . 'v' . 'e' . 'r' . 'y' . ' ' . 'w' . 'e' . 'e' . 'k' . x1 -> weekly-bar-39 . x1
+P165: P165 . 'W' . 'e' . 'e' . 'k' . 'l' . 'y' . x1 -> weekly-bar-40 . x1
+P166: P166 . weekly-bar-39 . x1 -> weekly-bar-40 . x1
+P167: P167 . 'w' . 'e' . 'e' . 'k' . 'l' . 'y' . x1 -> weekly-bar-41 . x1
+P168: P168 . weekly-bar-40 . x1 -> weekly-bar-41 . x1
+P169: P169 . weekly-bar-41 . x1 -> weekly . x1
 P17: P17 . '\'' . x1 -> symbol-bar-8(string-append(0, char-to-string('\''))) . x1
+P170: P170 . 'e' . 'v' . 'e' . 'r' . 'y' . ' ' . 'm' . 'o' . 'n' . 't' . 'h' . x1 -> monthly-bar-42 . x1
+P171: P171 . 'E' . 'v' . 'e' . 'r' . 'y' . ' ' . 'm' . 'o' . 'n' . 't' . 'h' . x1 -> monthly-bar-42 . x1
+P172: P172 . 'M' . 'o' . 'n' . 't' . 'h' . 'l' . 'y' . x1 -> monthly-bar-43 . x1
+P173: P173 . monthly-bar-42 . x1 -> monthly-bar-43 . x1
+P174: P174 . 'm' . 'o' . 'n' . 't' . 'h' . 'l' . 'y' . x1 -> monthly-bar-44 . x1
+P175: P175 . monthly-bar-43 . x1 -> monthly-bar-44 . x1
+P176: P176 . monthly-bar-44 . x1 -> monthly . x1
+P177: P177 . 'e' . 'v' . 'e' . 'r' . 'y' . ' ' . 'y' . 'e' . 'a' . 'r' . x1 -> yearly-bar-45 . x1
+P178: P178 . 'E' . 'v' . 'e' . 'r' . 'y' . ' ' . 'y' . 'e' . 'a' . 'r' . x1 -> yearly-bar-45 . x1
+P179: P179 . 'Y' . 'e' . 'a' . 'r' . 'l' . 'y' . x1 -> yearly-bar-46 . x1
 P18: P18 . symbol-bar-7(x0) . x1 -> symbol-bar-8(string-append(0, x0)) . x1
+P180: P180 . yearly-bar-45 . x1 -> yearly-bar-46 . x1
+P181: P181 . 'y' . 'e' . 'a' . 'r' . 'l' . 'y' . x1 -> yearly-bar-47 . x1
+P182: P182 . yearly-bar-46 . x1 -> yearly-bar-47 . x1
+P183: P183 . yearly-bar-47 . x1 -> yearly . x1
 P19: P19 . '"' . x1 -> symbol-bar-9(string-append(0, char-to-string('"'))) . x1
 P2: P2 . '\n' . x1 -> aws-bar-2 . x1
 P20: P20 . symbol-bar-8(x0) . x1 -> symbol-bar-9(string-append(0, x0)) . x1
@@ -771,9 +867,13 @@ P98: P98 . 'k' . x1 -> words-range-25(string-append(0, char-to-string('k'))) . x
 P99: P99 . 'l' . x1 -> words-range-25(string-append(0, char-to-string('l'))) . x1
 PM: PM . pm . x1 -> whichm(PM) . x1
 Posinfo: Posinfo . x1 -> posinfo(Posinfo) . x1
+Recurrence: Recurrence . 'R' . 'e' . 'p' . 'e' . 'a' . 't' . ':' . ows . frequency(x0) . ' ' . 'u' . 'n' . 't' . 'i' . 'l' . ' ' . date(x1) . ows . '\n' . other(x2) . x3 -> other(Recurrence(x0, x1, x2)) . x3
 RegTime: RegTime . hour(x0) . ':' . minute(x1) . ows . whichm(x2) . x3 -> time(RegTime(x0, x1, x2)) . x3
+SingleDateRange: SingleDateRange . date(x0) . x1 -> daterange(SingleDateRange(x0)) . x1
 Strt: Strt . ows . event(x0) . ows . x1 -> strt(Strt(x0)) . x1
 TimeRange: TimeRange . time(x0) . ows . sep . ows . time(x1) . x2 -> timerange(TimeRange(x0, x1)) . x2
+Weekly: Weekly . weekly . x1 -> frequency(Weekly) . x1
+Yearly: Yearly . yearly . x1 -> frequency(Yearly) . x1
 )
 (No reorganizing critical pairs found.)
 (No parsing critical pairs found.)
